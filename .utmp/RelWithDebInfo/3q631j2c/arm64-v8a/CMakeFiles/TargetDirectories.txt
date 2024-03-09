@@ -1,0 +1,5 @@
+C:/Users/Mika/Documents/ONI/GamesByHand/Nefausto/.utmp/RelWithDebInfo/3q631j2c/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/Mika/Documents/ONI/GamesByHand/Nefausto/.utmp/RelWithDebInfo/3q631j2c/arm64-v8a/CMakeFiles/rebuild_cache.dir
+C:/Users/Mika/Documents/ONI/GamesByHand/Nefausto/.utmp/RelWithDebInfo/3q631j2c/arm64-v8a/FramePacing/CMakeFiles/swappywrapper.dir
+C:/Users/Mika/Documents/ONI/GamesByHand/Nefausto/.utmp/RelWithDebInfo/3q631j2c/arm64-v8a/FramePacing/CMakeFiles/edit_cache.dir
+C:/Users/Mika/Documents/ONI/GamesByHand/Nefausto/.utmp/RelWithDebInfo/3q631j2c/arm64-v8a/FramePacing/CMakeFiles/rebuild_cache.dir
