@@ -272,6 +272,6 @@ MonoBehaviour:
   counterPointsCollide: 0
   counterIntersection: 0
   pointIntersection: {x: 0, y: 0}
-  lineMaxLength: 30
+  lineMaxLength: 25
   points: []
   pointsCount: 0

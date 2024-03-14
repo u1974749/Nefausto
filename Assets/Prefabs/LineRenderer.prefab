@@ -149,10 +149,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 20
   minDist: 1
-  lineColliders: []
   pointsLineRenderer: []
-  prefabCollider: {fileID: 7529817310002802345, guid: 81d0328069d923c4f8e2e2880f600349, type: 3}
+  pointsLineRendererCopy: []
+  counterPointsCollide: 0
+  counterIntersection: 0
+  pointIntersection: {x: 0, y: 0}
   lineMaxLength: 20
-  edgeCollider: {fileID: 0}
   points: []
   pointsCount: 0
