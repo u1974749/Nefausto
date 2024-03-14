@@ -1816,6 +1816,10 @@ PrefabInstance:
       propertyPath: m_Interpolate
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -2026855500643938144, guid: 899af197ccd95694d82c6152197bc65a, type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1673720520894772170, guid: 899af197ccd95694d82c6152197bc65a, type: 3}
       propertyPath: m_Name
       value: flamaProof

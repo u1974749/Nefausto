@@ -1,5 +1,9 @@
+using System;
+using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -16,14 +20,19 @@ public class captureMove : MonoBehaviour
     [SerializeField] private float minDist; //distance with points
 
     //COLLIDERS
-    [HideInInspector] public List<GameObject> lineColliders = new List<GameObject>();
+    //[HideInInspector] public List<GameObject> lineColliders = new List<GameObject>();
     [HideInInspector] public List<Vector3> pointsLineRenderer = new List<Vector3>();
-    public GameObject prefabCollider;
+    public List<Vector3> pointsLineRendererCopy = new List<Vector3>();
+    public int counterPointsCollide = 0;
+    public int counterIntersection = 0;
+    public Vector2 pointIntersection = new Vector2();
+    //public GameObject prefabCollider;
 
     //LINE RENDERER LENGTH
-    public int lineMaxLength;
+    public int lineMaxLength = 20;
 
     //PROOF
+    int counterCapture = 0;
     //public EdgeCollider2D edgeCollider;
     [HideInInspector] public List<Vector2> points = new List<Vector2>();
     [HideInInspector] public int pointsCount = 0;
@@ -51,26 +60,35 @@ public class captureMove : MonoBehaviour
                 {
                     transform.position = Vector3.MoveTowards(transform.position, hit.point, Time.deltaTime * speed);
                     transform.LookAt(new Vector3(hit.point.x, transform.position.y, hit.point.z));
+                    if (lineRenderer.positionCount >= 4)
+                    {
+                        if (checkIntersection())
+                        {
+                            pointsLineRendererCopy = pointsLineRenderer;
+                            //if(detectInCircle())
+                            if(detectInCircleVersion2())
+                            {
+                                counterCapture++;
+                                Debug.Log("DENTRO "+counterCapture);
+                            }
+                            lineRenderer.positionCount = 1;
+                            lineRenderer.SetPosition(0, antPosition);
+                            pointsLineRenderer.Clear();
+                            pointsLineRenderer.Add(antPosition);
+                        }
+
+                    }
                     if (Vector3.Distance(transform.position, antPosition) >= minDist)
                     {
-                        if (lineRenderer.positionCount >= 4)
-                        {
-                            if(checkIntersection())
-                            {
-                                lineRenderer.positionCount = 1;
-                                lineRenderer.SetPosition(0, antPosition);
-                                pointsLineRenderer.Clear();
-                                pointsLineRenderer.Add(antPosition);
-                            }
-
-                        }
-                        if (lineRenderer.positionCount == 20)
+            
+                        if (lineRenderer.positionCount == lineMaxLength)
                         {
                             for (int i = 0; i < pointsLineRenderer.Count-1; i++)
                                 lineRenderer.SetPosition(i, pointsLineRenderer[i + 1]);
                             lineRenderer.SetPosition(lineRenderer.positionCount - 1, transform.position);
                             pointsLineRenderer.RemoveAt(1);
                             pointsLineRenderer.Add(transform.position);
+
                             //GameObject g = lineColliders[0];
                             //lineColliders.RemoveAt(1);
                             //Destroy(g);
@@ -118,19 +136,7 @@ public class captureMove : MonoBehaviour
         }
     }
 
-    public void OnTriggerEnter(Collider other)
-    {
-        Debug.Log("YEAH");
-        Debug.Log(other.name);
-    }
-
-    public void OnTriggerEnter2D(Collider2D other)
-    {
-        Debug.Log("YEAH");
-        Debug.Log(other.name);
-    }
-
-    //CALCULO DE INTERSECCION
+    //CALCULATE INTERSECTION
     public bool checkIntersection()
     {
         //vector 3
@@ -143,10 +149,15 @@ public class captureMove : MonoBehaviour
         {
             Vector3 currentPoint1 = pointsLineRenderer[i];
             Vector3 currentPoint2 = pointsLineRenderer[i+1];
-
-            if (checkSegmentIntersection(lastPoint2,lastPoint1,currentPoint2,currentPoint1))
+            if(lastPoint2 == currentPoint1 || lastPoint2 == currentPoint2 || lastPoint1 == currentPoint1 || lastPoint1 == currentPoint2)
+                intersection = true;
+            else if (checkSegmentIntersection(lastPoint2,lastPoint1,currentPoint2,currentPoint1))
             {
+                //else if(doIntersect(lastPoint2,lastPoint1,currentPoint2,currentPoint1))
                 Debug.Log("INTERSECTION");
+                counterPointsCollide = i;
+                pointIntersection = calculateIntersection(lastPoint2, lastPoint1, currentPoint2, currentPoint1);
+
                 intersection = true;
             }
             else //Debug.Log("NOTHING");
@@ -161,9 +172,12 @@ public class captureMove : MonoBehaviour
         Vector3 vectorLastPoint = lastPoint2 - lastPoint1;
         Vector3 vectorCurrentPoint = currentPoint2 - currentPoint1;
 
-        if(calculateDeterminant(vectorLastPoint,currentPoint1,currentPoint2,lastPoint1))
+        //Debug.Log("CALCULATE");
+        //Debug.Log("current "+ currentPoint1 + " " + currentPoint2);
+        //Debug.Log("last point "+ lastPoint1 + " " + lastPoint2);
+        if(calculateDeterminant(vectorLastPoint,currentPoint1,currentPoint2,lastPoint1, lastPoint2))
         {
-            if (calculateDeterminant(vectorCurrentPoint, lastPoint1, lastPoint2, currentPoint1))
+            if (calculateDeterminant(vectorCurrentPoint, lastPoint1, lastPoint2, currentPoint1, currentPoint2))
                 return true;
             else
                 return false;
@@ -171,7 +185,7 @@ public class captureMove : MonoBehaviour
         else return false;
     }
 
-    public bool calculateDeterminant(Vector3 vector, Vector3 pointS2First, Vector3 pointS2Last, Vector3 pointS1)
+    public bool calculateDeterminant(Vector3 vector, Vector3 pointS2First, Vector3 pointS2Last, Vector3 pointS1, Vector3 pointS1Last)
     {
         double first = 0, second = 0;
 
@@ -179,8 +193,226 @@ public class captureMove : MonoBehaviour
         second = ((vector.x * (pointS2Last.z - pointS1.z)) - (vector.z * (pointS2Last.x - pointS1.x)));
 
         //Debug.Log(first + " + " + second);
+        /*if(first == 0  && second == 0)
+        {
+            if( ((pointS1.x <= pointS2First.x && pointS1.z <= pointS2First.z) && (pointS2First.x <= pointS1Last.x && pointS2First.z <= pointS1Last.z)) ||
+                ((pointS1.x <= pointS2Last.x && pointS1.z <= pointS2Last.z) && (pointS2Last.x <= pointS1Last.x && pointS2Last.z <= pointS1Last.z)) ||
+                ((pointS2First.x <= pointS1.x && pointS2First.z <= pointS1.z) && (pointS1.x <= pointS2Last.x && pointS1.z <= pointS2Last.z)))
+            {
+                //C ? AB o D ? AB o A ? CD
+                Debug.Log(" == ");
+                return true;
+            }
+            else return false;
+        }*/
         if ((first >= 0 && second < 0) || (first < 0 && second >= 0))
+        {
+            //Debug.Log(first + " >=< " + second);
             return true;
+        }
         else return false;
+    }
+
+    public Vector2 calculateIntersection(Vector3 lastPoint2, Vector3 lastPoint1, Vector3 currentPoint2, Vector3 currentPoint1)
+    {
+        Vector2 vAB = new Vector2 (lastPoint2.x -lastPoint1.x, lastPoint2.z - lastPoint1.z);
+        Vector2 vAC = new Vector2 (currentPoint1.x -lastPoint1.x, currentPoint1.z - lastPoint1.z);
+        Vector2 vCD = new Vector2 (currentPoint2.x -currentPoint1.x, currentPoint2.z - currentPoint1.z);
+
+        float landa = ((vAC.x*vCD.y)-(vAC.y*vCD.x)) / ((vAB.x*vCD.y)-(vAB.y*vCD.x));
+        Vector2 intersection = new Vector2((lastPoint1.x + (landa * vAB.x)), (lastPoint1.z + (landa * vAB.y)));
+
+        return intersection;
+    }
+
+    //DETECTION IN POLYGON VERSION 1
+    public bool detectInCircle()
+    {
+        Transform captureObject = GameObject.FindWithTag("captureObject").GetComponent<Transform>();
+        Debug.Log("POSITION "+captureObject.position);
+        Debug.Log("RESULTS "+ counterPointsCollide + " " + (pointsLineRenderer.Count - 1));
+        
+        //CALCULATE ALL THE LINE POINTS
+        List<Vector3> pointsLineAux = pointsLineRenderer;
+        pointsLineAux.Add(pointIntersection);
+        Debug.Log("pointoo + " +pointIntersection);
+
+        for (int i = counterPointsCollide; i < pointsLineAux.Count - counterPointsCollide-1; i++)
+        {
+            if(i%2 == 0 && pointsLineAux[i].z < captureObject.position.z 
+                && pointsLineAux[i+1].z >= captureObject.position.z)
+            {
+                Debug.Log("Nop");
+                calculateNumberIntersections(pointsLineAux[i], pointsLineAux[i+1], captureObject.position);
+            }
+            else if (i % 2 != 0 && pointsLineAux[i+1].z < captureObject.position.z
+                && pointsLineAux[i].z >= captureObject.position.z)
+            {
+                Debug.Log("Nel");
+                calculateNumberIntersections(pointsLineAux[i+1], pointsLineAux[i], captureObject.position);
+            }
+        }
+        int p = pointsLineAux.Count - counterPointsCollide-1;
+        if ((p % 2 == 0 && counterPointsCollide % 2 != 0) && (pointsLineAux[p].z < captureObject.position.z
+                && pointsLineAux[counterPointsCollide].z >= captureObject.position.z))
+        {
+                Debug.Log("F");
+            calculateNumberIntersections(pointsLineAux[p], pointsLineAux[counterPointsCollide], captureObject.position);
+        }
+        else if ((p % 2 != 0 && counterPointsCollide % 2 == 0) && (pointsLineAux[counterPointsCollide].z < captureObject.position.z
+                && pointsLineAux[p].z >= captureObject.position.z))
+        {
+                Debug.Log("aaaa");
+            calculateNumberIntersections(pointsLineAux[counterPointsCollide], pointsLineAux[p], captureObject.position);
+        }
+        Debug.Log("COUNTER + "+ counterIntersection);
+        if (counterIntersection % 2 == 0) return false;
+        else return true;
+    }
+
+    public void calculateNumberIntersections(Vector3 pointA, Vector3 pointB, Vector3 pointQ)
+    {
+        Vector2 vPoints = new Vector2(pointB.x - pointA.x, pointB.z - pointA.z);
+        Vector2 vOrigen = new Vector2(pointQ.x - pointA.x, pointQ.z - pointA.z);
+
+        double det = (vPoints.x * vOrigen.y) - (vPoints.y * vOrigen.x);
+        if (det > 0)
+            counterIntersection++;
+    }
+
+    //DETECTION IN POLYGON VERSION 2
+    public float MIN(float x, float z)
+    {
+        return (x < z ? x : z);
+    }
+
+    public float MAX(float x, float z)
+    {
+        return (x > z ? x : z);
+    }
+
+    public bool detectInCircleVersion2()
+    {
+        Transform captureObject = GameObject.FindWithTag("captureObject").GetComponent<Transform>();
+        Debug.Log("POSITION " + captureObject.position);
+        Debug.Log("RESULTS " + counterPointsCollide + " " + (pointsLineRenderer.Count - 1));
+        Debug.Log("pointoo + " + pointIntersection);
+        List<Vector3> pointsLineAux = pointsLineRenderer;
+        //pointsLineAux.Add(pointIntersection);
+        int counter = 0;
+        double xinters;
+        Vector3 p1, p2;
+
+        p1 = pointsLineAux[counterPointsCollide];
+        for (int i = counterPointsCollide+1; i <= pointsLineAux.Count; i++)
+        {
+            p2 = pointsLineAux[i % pointsLineAux.Count];
+            if (captureObject.position.z > MIN(p1.z, p2.z))
+            {
+                if (captureObject.position.z <= MAX(p1.z, p2.z))
+                {
+                    if (captureObject.position.x <= MAX(p1.x, p2.x))
+                    {
+                        if (p1.z != p2.z)
+                        {
+                            xinters = (captureObject.position.z - p1.z) * (p2.x - p1.x) / (p2.z - p1.z) + p1.x;
+                            if (p1.x == p2.x || captureObject.position.x <= xinters)
+                                counter++;
+                        }
+                        //float a = 2 * Mathf.PI; //como se usa pi
+                    }
+                }
+            }
+            p1 = p2;
+        }
+
+        if (counter % 2 == 0)
+            return false;
+        else
+            return true;
+    }
+
+    //DETECTION IN POLYGON VERSION 3
+    public double calculateAngle(Vector3 p, Vector3 s1, Vector3 s2)
+    {
+        Vector2 OA = new Vector2(s1.x-p.x, s1.z - p.z);
+        Vector2 OB = new Vector2(s2.x - p.x, s2.z - p.z);
+
+        double pAB = Math.Acos((OA.x * OB.x) + (OA.y * OB.y))/(Math.Sqrt((Math.Pow(OA.x,2)+ Math.Pow(OA.y,2))) * Math.Sqrt((Math.Pow(OB.x, 2) + Math.Pow(OB.y, 2))));
+        double angle = pAB * (180.0 / Mathf.PI);
+        return angle;
+    }
+
+    public int detectInCircleVersion3()
+    {
+        Transform captureObject = GameObject.FindWithTag("captureObject").GetComponent<Transform>();
+        List<Vector3> pointsLineAux = pointsLineRenderer;
+        pointsLineAux.Add(pointIntersection);
+        int suma = 0;
+        // Bucle por todos los segmentos del polígono.
+        for(int i = counterPointsCollide; i < pointsLineAux.Count-1; i++)
+        {
+            double angle = calculateAngle(captureObject.position, pointsLineAux[i], pointsLineAux[i+1]); // Ángulo con signo, desde V[i] hasta V[i+1]
+            if(Math.Abs(angle) == Mathf.PI)
+            {
+                return 0; // El punto está sobre el lado del polígono.
+            }
+            // Incrementar la suma de ángulos con signo.
+            suma = suma + (int)angle;
+        }
+        Debug.Log("SUMA "+suma);
+        if(suma >= 0 && suma < 1)  return -1; //Fuera
+        if(suma >= (2*Mathf.PI) && suma <= (2 * Mathf.PI)+1) return 1; //Dentro
+        return -1;
+    }
+
+    //VERSION 2 CALCULAR INTERSECCION NO OPERATIVA
+    static bool onSegment(Vector3 p, Vector3 q, Vector3 r)
+    {
+        if (q.x <= Math.Max(p.x, r.x) && q.x >= Math.Min(p.x, r.x) &&
+            q.z <= Math.Max(p.z, r.z) && q.z >= Math.Min(p.z, r.z))
+            return true;
+
+        return false;
+    }
+    static int orientation(Vector3 p, Vector3 q, Vector3 r)
+    {
+        // See 
+        // for details of below formula. 
+        float val = (int)((q.z - p.z) * (r.x - q.x) -
+                (q.x - p.x) * (r.z - q.z));
+
+        if (val == 0) return 0; // collinear 
+
+        return (val > 0) ? 1 : 2; // clock or counterclock wise 
+    }
+
+    static bool doIntersect(Vector3 p1, Vector3 q1, Vector3 p2, Vector3 q2)
+    {
+        // Find the four orientations needed for general and 
+        // special cases 
+        int o1 = orientation(p1, q1, p2);
+        int o2 = orientation(p1, q1, q2);
+        int o3 = orientation(p2, q2, p1);
+        int o4 = orientation(p2, q2, q1);
+
+        // General case 
+        if (o1 != o2 && o3 != o4)
+            return true;
+
+        // Special Cases 
+        // p1, q1 and p2 are collinear and p2 lies on segment p1q1 
+        if (o1 == 0 && onSegment(p1, p2, q1)) return true;
+
+        // p1, q1 and q2 are collinear and q2 lies on segment p1q1 
+        if (o2 == 0 && onSegment(p1, q2, q1)) return true;
+
+        // p2, q2 and p1 are collinear and p1 lies on segment p2q2 
+        if (o3 == 0 && onSegment(p2, p1, q2)) return true;
+
+        // p2, q2 and q1 are collinear and q1 lies on segment p2q2 
+        if (o4 == 0 && onSegment(p2, q1, q2)) return true;
+
+        return false; // Doesn't fall in any of the above cases 
     }
 }

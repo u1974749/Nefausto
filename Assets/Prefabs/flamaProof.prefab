@@ -68,6 +68,18 @@ PrefabInstance:
       propertyPath: m_TagString
       value: styler
       objectReference: {fileID: 0}
+    - target: {fileID: 6317578925029434746, guid: edee942f13783c74481d6f840ad85847, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 81c1860e7800e5340bf8a54c565ba9ea, type: 2}
+    - target: {fileID: 6317578925029434746, guid: edee942f13783c74481d6f840ad85847, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: fe2fc7a4042c62f44a57fd57fde7690e, type: 2}
+    - target: {fileID: 8100320773420232829, guid: edee942f13783c74481d6f840ad85847, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a8b68b45b8342dc468db1459dc43e7e0, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -137,7 +149,7 @@ SphereCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Radius: 1.2148162
-  m_Center: {x: 0.020640755, y: 0.18069841, z: 2.885255}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!120 &1565567113711472005
 LineRenderer:
   serializedVersion: 2
@@ -255,9 +267,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 20
   minDist: 0.6
-  lineColliders: []
   pointsLineRenderer: []
-  prefabCollider: {fileID: 7529817310002802345, guid: 81d0328069d923c4f8e2e2880f600349, type: 3}
-  lineMaxLength: 15
+  pointsLineRendererCopy: []
+  counterPointsCollide: 0
+  counterIntersection: 0
+  pointIntersection: {x: 0, y: 0}
+  lineMaxLength: 30
   points: []
   pointsCount: 0

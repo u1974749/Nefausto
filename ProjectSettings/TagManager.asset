@@ -4,9 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - captureObject
   - joystick
   - styler
+  - captureObject
   layers:
   - Default
   - TransparentFX
