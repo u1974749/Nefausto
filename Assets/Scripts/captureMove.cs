@@ -70,11 +70,14 @@ public class captureMove : MonoBehaviour
                         {
                             pointsLineRendererCopy = pointsLineRenderer;
                             //if(detectInCircle())
-                            if(detectInCircleVersion2())
+
+                            if (WindingNumber()) Debug.Log("I'M IN ?");
+                            else Debug.Log("NO IN");
+                            /*if (detectInCircleVersion2())
                             {
                                 counterCapture++;
                                 Debug.Log("DENTRO "+counterCapture);
-                            }
+                            }*/
                             lineRenderer.positionCount = 1;
                             lineRenderer.SetPosition(0, antPosition);
                             pointsLineRenderer.Clear();
@@ -279,6 +282,47 @@ public class captureMove : MonoBehaviour
             return false;
         else
             return true;
+    }
+
+    //VERSION 4 DETECT CIRCLE
+
+    static int IsLeft(Vector3 a, Vector3 b, Vector3 point)
+    {
+        return (int)((b.x - a.x) * (point.z - a.z)
+                    - (point.x - a.x) * (b.z - a.z));
+    }
+
+    public bool WindingNumber()
+    {
+        Transform captureObject = GameObject.FindWithTag("captureObject").GetComponent<Transform>();
+        List<Vector3> pointsLineAux = pointsLineRenderer;
+        int vCount = pointsLineAux.Count;
+        if (vCount < 2) return (captureObject.position.x == pointsLineAux[0].x && captureObject.position.z == pointsLineAux[0].z);
+
+        int wn = 0;
+        for (int i = counterPointsCollide+1, j = vCount - 1; i < vCount; j = i++)
+        {
+            var a = pointsLineAux[j];
+            var b = pointsLineAux[i];
+
+            if (b.z <= captureObject.position.z)
+            {
+                // start y <= P.y
+                if (pointsLineAux[j].z > captureObject.position.z)      // an upward crossing
+                    if (IsLeft(b, a, captureObject.position) > 0) // P left of  edge
+                        ++wn;                    // have  a valid up intersect
+            }
+            else
+            {
+                // start y > P.y (no test needed)
+                if (a.z <= captureObject.position.z)              // a downward crossing
+                    if (IsLeft(b, a, captureObject.position) < 0) // P right of  edge
+                        --wn;                    // have  a valid down intersect
+            }
+        }
+
+        return wn != 0;
+        //return wn%2== 0;
     }
 
     //VERSION 2 CALCULAR INTERSECCION NO OPERATIVA
