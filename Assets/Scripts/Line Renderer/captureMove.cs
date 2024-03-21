@@ -2,6 +2,7 @@ using System;
 using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -26,8 +27,8 @@ public class captureMove : MonoBehaviour
     public Vector2 pointIntersection = new Vector2();
 
     //COLLIDERS
-    //[HideInInspector] public List<GameObject> lineColliders = new List<GameObject>();
-    //public GameObject prefabCollider;
+    [HideInInspector] public List<GameObject> lineColliders = new List<GameObject>();
+    public GameObject prefabCollider;
 
     //LINE RENDERER LENGTH
     public int lineMaxLength = 20;
@@ -40,6 +41,9 @@ public class captureMove : MonoBehaviour
     [HideInInspector] public List<Vector2> points = new List<Vector2>();
     [HideInInspector] public int pointsCount = 0;
 
+    //DEBUG
+    int life = 5;
+
 
     private void Start()
     {
@@ -50,10 +54,10 @@ public class captureMove : MonoBehaviour
         lineRenderer.positionCount = 1;
         lineRenderer.SetPosition(0, transform.position);
         pointsLineRenderer.Add(transform.position);
+        //Init();
     }
     void Update()
     {
-        
         if (Input.GetMouseButton(0))
         {
             ray = cam.ScreenPointToRay(Input.mousePosition);
@@ -66,6 +70,14 @@ public class captureMove : MonoBehaviour
                     transform.LookAt(new Vector3(hit.point.x, transform.position.y, hit.point.z));
                     if (lineRenderer.positionCount >= 4)
                     {
+                        /*if(checkCollision())
+                        {
+                            Debug.Log("COLLISION");
+                            lineRenderer.positionCount = 1;
+                            lineRenderer.SetPosition(0, antPosition);
+                            pointsLineRenderer.Clear();
+                            pointsLineRenderer.Add(antPosition);
+                        }*/
                         if (checkIntersection())
                         {
                             pointsLineRendererCopy = pointsLineRenderer;
@@ -82,6 +94,7 @@ public class captureMove : MonoBehaviour
                             lineRenderer.SetPosition(0, antPosition);
                             pointsLineRenderer.Clear();
                             pointsLineRenderer.Add(antPosition);
+                            DestroyAllColliders();
                         }
 
                     }
@@ -93,13 +106,16 @@ public class captureMove : MonoBehaviour
                             for (int i = 0; i < pointsLineRenderer.Count-1; i++)
                                 lineRenderer.SetPosition(i, pointsLineRenderer[i + 1]);
                             lineRenderer.SetPosition(lineRenderer.positionCount - 1, transform.position);
-                            pointsLineRenderer.RemoveAt(1);
+                            pointsLineRenderer.RemoveAt(0);
                             pointsLineRenderer.Add(transform.position);
 
-                            //GameObject g = lineColliders[0];
-                            //lineColliders.RemoveAt(1);
-                            //Destroy(g);
-                            //lineColliders.Add(prefabCollider);
+                            GameObject g = lineColliders[0];
+                            lineColliders.RemoveAt(0);
+                            Destroy(g);
+                            g = Instantiate(prefabCollider, transform.position, Quaternion.identity);
+                            lineColliders.Add(g);
+                            //g.transform.position = transform.position;
+                            //lineColliders.Add(g);
                             //Instantiate(lineColliders[lineColliders.Count - 1], transform.position, Quaternion.identity);
                         }
                         else
@@ -120,14 +136,15 @@ public class captureMove : MonoBehaviour
                                 points.Add(newPoint);
                                 pointsCount++;*/
                                 lineRenderer.SetPosition(lineRenderer.positionCount - 1, transform.position);
-                                //lineColliders.Add(prefabCollider);
-                                //Instantiate(lineColliders[lineColliders.Count-1], transform.position, Quaternion.identity);
+                                GameObject g = Instantiate(prefabCollider, transform.position, Quaternion.identity);
+                                lineColliders.Add(g);
 
                                 //lineLength
                                 pointsLineRenderer.Add(transform.position);
                             //}
                         }
                         antPosition = transform.position;
+                        //AddMeshColliderVertices(vertices.Length);
                         /*if (pointsCount > 1)
                             edgeCollider.points = points.ToArray();
                         Instantiate(prefabCollider, transform.position, Quaternion.identity);
@@ -141,6 +158,39 @@ public class captureMove : MonoBehaviour
                 }
             }
         }
+    }
+
+    //DELETE COLLIDER
+    void DestroyAllColliders()
+    {
+        for(int i = 0; i < lineColliders.Count; i++)
+        {
+            Destroy(lineColliders[i]);
+        }
+        lineColliders.Clear();
+        GameObject g = Instantiate(prefabCollider, transform.position, Quaternion.identity);
+        lineColliders.Add(g);
+    }
+
+    public void ClearColliders(int option)
+    {
+        //if option == 0 is a enemy, else if option == 1 is a attack
+
+        if (option == 0)
+        {
+            //ANIMATION CONFUSE
+        }
+        else if(option == 1)
+        {
+            life--;
+            Debug.Log("LIFE: " + life);
+        }
+
+        lineRenderer.positionCount = 1;
+        lineRenderer.SetPosition(0, antPosition);
+        pointsLineRenderer.Clear();
+        pointsLineRenderer.Add(antPosition);
+        DestroyAllColliders();
     }
 
     //CALCULATE INTERSECTION

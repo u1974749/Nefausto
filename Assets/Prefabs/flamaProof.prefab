@@ -146,7 +146,7 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Radius: 1.2148162
   m_Center: {x: 0, y: 0, z: 0}
@@ -272,6 +272,8 @@ MonoBehaviour:
   counterPointsCollide: 0
   counterIntersection: 0
   pointIntersection: {x: 0, y: 0}
+  lineColliders: []
+  prefabCollider: {fileID: 7529817310002802345, guid: 81d0328069d923c4f8e2e2880f600349, type: 3}
   lineMaxLength: 25
   points: []
   pointsCount: 0
