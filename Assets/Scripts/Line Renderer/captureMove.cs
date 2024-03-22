@@ -178,10 +178,11 @@ public class captureMove : MonoBehaviour
 
         if (option == 0)
         {
-            //ANIMATION CONFUSE
+            //ANIMATION CONFUSE + PARTICLES
         }
         else if(option == 1)
         {
+            //ANIMATION EXPLODE STYLER + PARTICLES
             life--;
             Debug.Log("LIFE: " + life);
         }
@@ -262,11 +263,12 @@ public class captureMove : MonoBehaviour
             }
             else return false;
         }*/
+
+        //COLLINEAR
+        if (first == 0 && onSegment(pointS2First, pointS2Last, pointS1)) return true;
+        if (second == 0 && onSegment(pointS2Last, pointS1, pointS1Last)) return true;
         if ((first > 0 && second < 0) || (first < 0 && second > 0))
-        {
-            //Debug.Log(first + " >=< " + second);
             return true;
-        }
         else return false;
     }
 
@@ -334,7 +336,7 @@ public class captureMove : MonoBehaviour
             return true;
     }
 
-    //VERSION 4 DETECT CIRCLE
+    //VERSION 4 DETECT CIRCLE (((((((ACTIVO)))))))))
 
     static int IsLeft(Vector3 a, Vector3 b, Vector3 point)
     {
@@ -376,7 +378,7 @@ public class captureMove : MonoBehaviour
     }
 
     //VERSION 2 CALCULAR INTERSECCION NO OPERATIVA
-    static bool onSegment(Vector3 p, Vector3 q, Vector3 r)
+    static bool onSegment(Vector3 p, Vector3 q, Vector3 r) //UTILIZANDO
     {
         if (q.x <= Math.Max(p.x, r.x) && q.x >= Math.Min(p.x, r.x) &&
             q.z <= Math.Max(p.z, r.z) && q.z >= Math.Min(p.z, r.z))
@@ -384,6 +386,7 @@ public class captureMove : MonoBehaviour
 
         return false;
     }
+
     static int orientation(Vector3 p, Vector3 q, Vector3 r)
     {
         // See 
