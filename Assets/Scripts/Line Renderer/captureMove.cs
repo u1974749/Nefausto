@@ -6,7 +6,8 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-
+using TMPro;
+using UnityEngine.UI;
 public class captureMove : MonoBehaviour
 {
     //DRAW LINE RENDERER
@@ -43,10 +44,10 @@ public class captureMove : MonoBehaviour
 
     //DEBUG
     int life = 5;
-
+    //public TextMeshProUGUI life_ui;
 
     private void Start()
-    {
+    { 
         cam = GameObject.Find("Main Camera").GetComponent<Camera>();
         floor = GameObject.Find("FakeFloor").GetComponent<Collider>();
         lineRenderer = GetComponent<LineRenderer>();
@@ -95,6 +96,8 @@ public class captureMove : MonoBehaviour
                             pointsLineRenderer.Clear();
                             pointsLineRenderer.Add(antPosition);
                             DestroyAllColliders();
+                            //life--;
+                            //life_ui.text = life.ToString();
                         }
 
                     }
@@ -184,6 +187,7 @@ public class captureMove : MonoBehaviour
         {
             //ANIMATION EXPLODE STYLER + PARTICLES
             life--;
+            //life_ui.text = life.ToString();
             Debug.Log("LIFE: " + life);
         }
 
@@ -383,7 +387,6 @@ public class captureMove : MonoBehaviour
         if (q.x <= Math.Max(p.x, r.x) && q.x >= Math.Min(p.x, r.x) &&
             q.z <= Math.Max(p.z, r.z) && q.z >= Math.Min(p.z, r.z))
             return true;
-
         return false;
     }
 

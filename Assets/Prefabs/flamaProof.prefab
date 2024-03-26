@@ -277,3 +277,4 @@ MonoBehaviour:
   lineMaxLength: 25
   points: []
   pointsCount: 0
+  life_ui: {fileID: 0}
