@@ -150,7 +150,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 20
-  minDist: 1
+  minDist: 0.6
   pointsLineRenderer: []
   pointsLineRendererCopy: []
   counterPointsCollide: 0

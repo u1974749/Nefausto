@@ -8,6 +8,8 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
 public class captureMove : MonoBehaviour
 {
     //DRAW LINE RENDERER
@@ -35,7 +37,8 @@ public class captureMove : MonoBehaviour
     public int lineMaxLength = 20;
 
     //PROOF
-    int counterCapture = 0;
+    int counterCapture = 10;
+    bool finishCapture = false;
 
     //EDGE COLLIDERS
     //public EdgeCollider2D edgeCollider;
@@ -98,6 +101,9 @@ public class captureMove : MonoBehaviour
                             DestroyAllColliders();
                             //life--;
                             //life_ui.text = life.ToString();
+                            Debug.Log("CAPTURE: "+counterCapture);
+                            counterCapture--;
+                            if (counterCapture == 0) finishCapture = true;
                         }
 
                     }
@@ -160,6 +166,13 @@ public class captureMove : MonoBehaviour
                     }*/
                 }
             }
+        }
+        if (finishCapture)
+        {
+            //show menus 
+            //save dates if complete capture
+            //change scene en la posicion indicada
+            SceneManager.LoadScene("SampleScene");
         }
     }
 

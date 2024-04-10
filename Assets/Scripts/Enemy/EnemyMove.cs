@@ -11,8 +11,12 @@ public class EnemyMove : MonoBehaviour
     public float maxTargX;
     public float minTargZ;
     public float maxTargZ;
+    
+    public int waitTimeMin;
+    public int waitTimeMax;
 
     public Vector2 currentTarg;
+
     void Start()
     {
         RandomDirection();
@@ -31,7 +35,7 @@ public class EnemyMove : MonoBehaviour
             RandomDirection();
             Vector3 v = new Vector3(currentTarg.x, 0.75f, currentTarg.y);
             transform.GetComponent<NavMeshAgent>().SetDestination(v);
-            float time = Random.Range(0, 4);
+            float time = Random.Range(waitTimeMin, waitTimeMax);
             yield return new WaitForSeconds(time);
         }
     }

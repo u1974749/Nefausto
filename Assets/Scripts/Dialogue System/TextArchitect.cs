@@ -67,6 +67,7 @@ public class TextArchitect
 
     private Coroutine buildProcess = null;
     public bool isBuilding => buildProcess != null;
+    public bool checkBuild = false;
 
     public void Stop()
     {
@@ -79,8 +80,8 @@ public class TextArchitect
     IEnumerator Building()
     {
         Prepare();
-
-        switch(buildMethod)
+        checkBuild = true;
+        switch (buildMethod)
         {
             case BuildMethod.typewriter:
                 yield return BuildTypewriter();
@@ -93,6 +94,7 @@ public class TextArchitect
     }
     private void OnComplete()
     {
+        checkBuild = false;
         buildProcess = null;
         hurryUp = false;
     }
@@ -107,6 +109,7 @@ public class TextArchitect
             case BuildMethod.fade:
                 break;
         }
+
         Stop();
         OnComplete();
     }
@@ -123,7 +126,6 @@ public class TextArchitect
             case BuildMethod.fade:
                 PrepareFade();
                 break;
-
         }
     }
 
@@ -160,8 +162,6 @@ public class TextArchitect
             tmpro.maxVisibleCharacters += hurryUp ? charactersPerCycle * 5 : charactersPerCycle;
             yield return new WaitForSeconds(0.015f / speed);
         }
-
-
     }
     private IEnumerator BuildFade()
     {

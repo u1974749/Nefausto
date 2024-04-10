@@ -95,7 +95,7 @@ PrefabInstance:
       addedObject: {fileID: 1565567113711472005}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: edee942f13783c74481d6f840ad85847, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 9134811106219821034}
+      addedObject: {fileID: 6356038514451911737}
   m_SourcePrefab: {fileID: 100100000, guid: edee942f13783c74481d6f840ad85847, type: 3}
 --- !u!1 &1673720520894772170 stripped
 GameObject:
@@ -253,7 +253,7 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!114 &9134811106219821034
+--- !u!114 &6356038514451911737
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -265,7 +265,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26d6bf240234b704dadfc87a3838585b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 20
+  speed: 10
   minDist: 0.6
   pointsLineRenderer: []
   pointsLineRendererCopy: []
@@ -277,4 +277,3 @@ MonoBehaviour:
   lineMaxLength: 25
   points: []
   pointsCount: 0
-  life_ui: {fileID: 0}
