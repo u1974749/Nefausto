@@ -14,7 +14,7 @@ public class VacíoDialogue : MonoBehaviour
         character.SetActive(true);
         introduction.SetActive(true);
         canvas.SetActive(true);
-        introduction.GetComponent<Test_Architect>().changeOptions();
+        introduction.GetComponent<Test_Architect>().onOptions();
     }
 
     public void ActiveFinalMessage()

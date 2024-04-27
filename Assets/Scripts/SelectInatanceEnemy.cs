@@ -5,24 +5,18 @@ using UnityEngine;
 public class SelectInatanceEnemy : MonoBehaviour
 {
     // Start is called before the first frame update
-    public GameObject belial;
-    public GameObject trail;
+    public GameObject sad;
+    public GameObject curiosity;
 
     void Start()
     {
         if(InteractNPC.enemyInstance == 0)
         {
-            belial.SetActive(true);
+            sad.SetActive(true);
         }
         else if (InteractNPC.enemyInstance == 1)
         {
-            trail.SetActive(true);
+            curiosity.SetActive(true);
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

@@ -54,12 +54,12 @@ namespace TESTING
                     Debug.Log("Building");
                     architect.ForceComplete();
                 }
-                if (n == lines.Length)
+                else if (n == lines.Length)
                 {
                     if (activeOptions)
                     {
                         options.SetActive(true);
-                        activeOptions = false;
+                        n = lines.Length;
                     }
                     else
                     {
@@ -67,9 +67,8 @@ namespace TESTING
                         dialogue.SetActive(false);
                         canvas.SetActive(false);
                         controls.SetActive(true);
+                        n = 0;
                     }
-                    n = 0;
-
                 }
                 else
                 {    
@@ -82,9 +81,19 @@ namespace TESTING
               //  architect.Append(lina[Random.Range(0, lina.Length)]);
         }
 
-        public void changeOptions()
+        public void onOptions()
         {
             activeOptions = true;
+        }
+
+        public void offOptions()
+        {
+            activeOptions = false;
+            character.SetActive(false);
+            dialogue.SetActive(false);
+            canvas.SetActive(false);
+            controls.SetActive(true);
+            n = 0;
         }
     }
 }

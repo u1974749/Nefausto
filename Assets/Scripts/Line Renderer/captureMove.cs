@@ -24,7 +24,7 @@ public class captureMove : MonoBehaviour
 
     //MATH CALCULATE
     [HideInInspector] public List<Vector3> pointsLineRenderer = new List<Vector3>();
-    public List<Vector3> pointsLineRendererCopy = new List<Vector3>(); //DEBUG
+    //public List<Vector3> pointsLineRendererCopy = new List<Vector3>(); //DEBUG
     public int counterPointsCollide = 0;
     public int counterIntersection = 0;
     public Vector2 pointIntersection = new Vector2();
@@ -37,7 +37,7 @@ public class captureMove : MonoBehaviour
     public int lineMaxLength = 20;
 
     //PROOF
-    int counterCapture = 10;
+    public int counterCapture;
     bool finishCapture = false;
 
     //EDGE COLLIDERS
@@ -45,12 +45,19 @@ public class captureMove : MonoBehaviour
     [HideInInspector] public List<Vector2> points = new List<Vector2>();
     [HideInInspector] public int pointsCount = 0;
 
+    //FEEDBACK
+    public GameObject floatingText;
+
     //DEBUG
-    int life = 5;
+    public UIHealth life;
     //public TextMeshProUGUI life_ui;
+    public static bool captureSad = true;
+    public static bool captureCuriosity = false;
+    public static bool captureHook = false;
+    public static bool captureDeath = false;
 
     private void Start()
-    { 
+    {
         cam = GameObject.Find("Main Camera").GetComponent<Camera>();
         floor = GameObject.Find("FakeFloor").GetComponent<Collider>();
         lineRenderer = GetComponent<LineRenderer>();
@@ -58,7 +65,7 @@ public class captureMove : MonoBehaviour
         lineRenderer.positionCount = 1;
         lineRenderer.SetPosition(0, transform.position);
         pointsLineRenderer.Add(transform.position);
-        //Init();
+        counterCapture = GameObject.FindWithTag("captureObject").GetComponent<EnemyMove>().counterCapture;
     }
     void Update()
     {
@@ -68,7 +75,7 @@ public class captureMove : MonoBehaviour
             if (Physics.Raycast(ray, out hit))
             {
                 Debug.DrawRay(transform.position, hit.point, Color.green);
-                if (hit.collider == floor) 
+                if (hit.collider == floor)
                 {
                     transform.position = Vector3.MoveTowards(transform.position, hit.point, Time.deltaTime * speed);
                     transform.LookAt(new Vector3(hit.point.x, transform.position.y, hit.point.z));
@@ -84,35 +91,61 @@ public class captureMove : MonoBehaviour
                         }*/
                         if (checkIntersection())
                         {
-                            pointsLineRendererCopy = pointsLineRenderer;
+                            //pointsLineRendererCopy = pointsLineRenderer;
                             //if(detectInCircle())
 
-                            if (WindingNumber()) Debug.Log("I'M IN ?");
+                            if (WindingNumber())
+                            {
+                                GameObject captureObject = GameObject.FindWithTag("captureObject");
+                                if (captureObject.GetComponent<DestroyIllusion>() != null)
+                                    captureObject.GetComponent<DestroyIllusion>().eliminateIllusion();
+                                else
+                                {
+                                    if (floatingText != null)
+                                    {
+                                        Debug.Log("I'M IN ?");
+                                        ShowFloatingText();
+                                    }
+                                    counterCapture--;
+                                }
+                                //
+                                //REVISADCIOOOOOOOOON
+                                //---------------------------------------------------------------------
+                                /*DoubleEnemy checkDouble = GameObject.FindWithTag("captureObject").GetComponent<DoubleEnemy>();
+                                if (checkDouble == null)
+                                {
+                                    Debug.Log("LOGRADISMOOOOOO FIESTAAAAAAAA ");
+                                    GameObject captureObject = GameObject.FindWithTag("captureObject");
+                                    captureObject.GetComponent<DoubleEnemy>().deleteDouble(captureObject);
+                                }*/
+                            }
                             else Debug.Log("NO IN");
                             /*if (detectInCircleVersion2())
                             {
                                 counterCapture++;
                                 Debug.Log("DENTRO "+counterCapture);
                             }*/
+
                             lineRenderer.positionCount = 1;
                             lineRenderer.SetPosition(0, antPosition);
                             pointsLineRenderer.Clear();
                             pointsLineRenderer.Add(antPosition);
                             DestroyAllColliders();
+                            GameObject g = Instantiate(prefabCollider, transform.position, Quaternion.identity);
+                            lineColliders.Add(g);
                             //life--;
                             //life_ui.text = life.ToString();
-                            Debug.Log("CAPTURE: "+counterCapture);
-                            counterCapture--;
+                            Debug.Log("CAPTURE: " + counterCapture);
                             if (counterCapture == 0) finishCapture = true;
                         }
 
                     }
                     if (Vector3.Distance(transform.position, antPosition) >= minDist)
                     {
-            
+
                         if (lineRenderer.positionCount == lineMaxLength)
                         {
-                            for (int i = 0; i < pointsLineRenderer.Count-1; i++)
+                            for (int i = 0; i < pointsLineRenderer.Count - 1; i++)
                                 lineRenderer.SetPosition(i, pointsLineRenderer[i + 1]);
                             lineRenderer.SetPosition(lineRenderer.positionCount - 1, transform.position);
                             pointsLineRenderer.RemoveAt(0);
@@ -131,25 +164,25 @@ public class captureMove : MonoBehaviour
                         {
                             //if (antPosition == transform.position)
                             //{
-                              //  lineRenderer.SetPosition(0, transform.position);
-                                /*Vector2 newPoint = new Vector2(transform.position.x, transform.position.y);
-                                points.Add(newPoint);
-                                pointsCount++;*/
+                            //  lineRenderer.SetPosition(0, transform.position);
+                            /*Vector2 newPoint = new Vector2(transform.position.x, transform.position.y);
+                            points.Add(newPoint);
+                            pointsCount++;*/
 
-                                //collider.isTrigger = true;
+                            //collider.isTrigger = true;
                             //}
                             //else
                             //{
-                                lineRenderer.positionCount++;
-                                /*Vector2 newPoint = new Vector2(transform.position.x, transform.position.y);
-                                points.Add(newPoint);
-                                pointsCount++;*/
-                                lineRenderer.SetPosition(lineRenderer.positionCount - 1, transform.position);
-                                GameObject g = Instantiate(prefabCollider, transform.position, Quaternion.identity);
-                                lineColliders.Add(g);
+                            lineRenderer.positionCount++;
+                            /*Vector2 newPoint = new Vector2(transform.position.x, transform.position.y);
+                            points.Add(newPoint);
+                            pointsCount++;*/
+                            lineRenderer.SetPosition(lineRenderer.positionCount - 1, transform.position);
+                            GameObject g = Instantiate(prefabCollider, transform.position, Quaternion.identity);
+                            lineColliders.Add(g);
 
-                                //lineLength
-                                pointsLineRenderer.Add(transform.position);
+                            //lineLength
+                            pointsLineRenderer.Add(transform.position);
                             //}
                         }
                         antPosition = transform.position;
@@ -172,6 +205,18 @@ public class captureMove : MonoBehaviour
             //show menus 
             //save dates if complete capture
             //change scene en la posicion indicada
+            GameObject captureObject = GameObject.FindWithTag("captureObject");
+            if (captureObject.name == "BELIAL_Lineart") //CHANGE NAME
+                captureSad = true;
+            else if (captureObject.name == "Curiosity")
+                captureCuriosity = true;
+            else if (captureObject.name == "Hook")
+                captureHook = true;
+            SceneManager.LoadScene("SampleScene");
+        }
+        if(UIHealth.health <= 0)
+        {
+            captureDeath = true; ///QUITAR EN EL DIALOGO
             SceneManager.LoadScene("SampleScene");
         }
     }
@@ -179,13 +224,13 @@ public class captureMove : MonoBehaviour
     //DELETE COLLIDER
     void DestroyAllColliders()
     {
-        for(int i = 0; i < lineColliders.Count; i++)
+        for (int i = 0; i < lineColliders.Count; i++)
         {
             Destroy(lineColliders[i]);
         }
         lineColliders.Clear();
-        GameObject g = Instantiate(prefabCollider, transform.position, Quaternion.identity);
-        lineColliders.Add(g);
+        //GameObject g = Instantiate(prefabCollider, transform.position, Quaternion.identity);
+        //lineColliders.Add(g);
     }
 
     public void ClearColliders(int option)
@@ -196,12 +241,12 @@ public class captureMove : MonoBehaviour
         {
             //ANIMATION CONFUSE + PARTICLES
         }
-        else if(option == 1)
+        else if (option == 1)
         {
             //ANIMATION EXPLODE STYLER + PARTICLES
-            life--;
+            GameObject.FindWithTag("Canvas").GetComponent<UIHealth>().Damage();
             //life_ui.text = life.ToString();
-            Debug.Log("LIFE: " + life);
+            //Debug.Log("LIFE: " + life);
         }
 
         lineRenderer.positionCount = 1;
@@ -220,13 +265,13 @@ public class captureMove : MonoBehaviour
         int i = 0;
         bool intersection = false;
 
-        while( i < pointsLineRenderer.Count-3 && !intersection)
+        while (i < pointsLineRenderer.Count - 3 && !intersection)
         {
             Vector3 currentPoint1 = pointsLineRenderer[i];
-            Vector3 currentPoint2 = pointsLineRenderer[i+1];
-            if(lastPoint2 == currentPoint1 || lastPoint2 == currentPoint2 || lastPoint1 == currentPoint1 || lastPoint1 == currentPoint2)
+            Vector3 currentPoint2 = pointsLineRenderer[i + 1];
+            if (lastPoint2 == currentPoint1 || lastPoint2 == currentPoint2 || lastPoint1 == currentPoint1 || lastPoint1 == currentPoint2)
                 intersection = true;
-            else if (checkSegmentIntersection(lastPoint2,lastPoint1,currentPoint2,currentPoint1))
+            else if (checkSegmentIntersection(lastPoint2, lastPoint1, currentPoint2, currentPoint1))
             {
                 //else if(doIntersect(lastPoint2,lastPoint1,currentPoint2,currentPoint1))
                 Debug.Log("INTERSECTION");
@@ -250,7 +295,7 @@ public class captureMove : MonoBehaviour
         //Debug.Log("CALCULATE");
         //Debug.Log("current "+ currentPoint1 + " " + currentPoint2);
         //Debug.Log("last point "+ lastPoint1 + " " + lastPoint2);
-        if(calculateDeterminant(vectorLastPoint,currentPoint1,currentPoint2,lastPoint1, lastPoint2))
+        if (calculateDeterminant(vectorLastPoint, currentPoint1, currentPoint2, lastPoint1, lastPoint2))
         {
             if (calculateDeterminant(vectorCurrentPoint, lastPoint1, lastPoint2, currentPoint1, currentPoint2))
                 return true;
@@ -291,18 +336,18 @@ public class captureMove : MonoBehaviour
 
     public Vector2 calculateIntersection(Vector3 lastPoint2, Vector3 lastPoint1, Vector3 currentPoint2, Vector3 currentPoint1)
     {
-        Vector2 vAB = new Vector2 (lastPoint2.x -lastPoint1.x, lastPoint2.z - lastPoint1.z);
-        Vector2 vAC = new Vector2 (currentPoint1.x -lastPoint1.x, currentPoint1.z - lastPoint1.z);
-        Vector2 vCD = new Vector2 (currentPoint2.x -currentPoint1.x, currentPoint2.z - currentPoint1.z);
+        Vector2 vAB = new Vector2(lastPoint2.x - lastPoint1.x, lastPoint2.z - lastPoint1.z);
+        Vector2 vAC = new Vector2(currentPoint1.x - lastPoint1.x, currentPoint1.z - lastPoint1.z);
+        Vector2 vCD = new Vector2(currentPoint2.x - currentPoint1.x, currentPoint2.z - currentPoint1.z);
 
-        float landa = ((vAC.x*vCD.y)-(vAC.y*vCD.x)) / ((vAB.x*vCD.y)-(vAB.y*vCD.x));
+        float landa = ((vAC.x * vCD.y) - (vAC.y * vCD.x)) / ((vAB.x * vCD.y) - (vAB.y * vCD.x));
         Vector2 intersection = new Vector2((lastPoint1.x + (landa * vAB.x)), (lastPoint1.z + (landa * vAB.y)));
 
         return intersection;
     }
 
     //DETECTION IN POLYGON VERSION 2
-    public float MIN(float x, float z)
+    /*public float MIN(float x, float z)
     {
         return (x < z ? x : z);
     }
@@ -351,7 +396,7 @@ public class captureMove : MonoBehaviour
             return false;
         else
             return true;
-    }
+    }*/
 
     //VERSION 4 DETECT CIRCLE (((((((ACTIVO)))))))))
 
@@ -369,7 +414,7 @@ public class captureMove : MonoBehaviour
         if (vCount < 2) return (captureObject.position.x == pointsLineAux[0].x && captureObject.position.z == pointsLineAux[0].z);
 
         int wn = 0;
-        for (int i = counterPointsCollide+1, j = vCount - 1; i < vCount; j = i++)
+        for (int i = counterPointsCollide + 1, j = vCount - 1; i < vCount; j = i++)
         {
             var a = pointsLineAux[j];
             var b = pointsLineAux[i];
@@ -402,7 +447,7 @@ public class captureMove : MonoBehaviour
             return true;
         return false;
     }
-
+    /*
     static int orientation(Vector3 p, Vector3 q, Vector3 r)
     {
         // See 
@@ -442,5 +487,15 @@ public class captureMove : MonoBehaviour
         if (o4 == 0 && onSegment(p2, q1, q2)) return true;
 
         return false; // Doesn't fall in any of the above cases 
+    }*/
+
+    public void ShowFloatingText()
+    {
+        Transform captureObject = GameObject.FindWithTag("captureObject").GetComponent<Transform>();
+        Vector3 rot = new Vector3(0, -90, 0);
+        Vector3 pos = new Vector3(captureObject.transform.position.x, captureObject.transform.position.y+1.5f, captureObject.transform.position.z+0.4f);
+        GameObject feedbackText = Instantiate(floatingText, pos, Quaternion.LookRotation(rot), captureObject.transform);
+        feedbackText.GetComponent<TextMesh>().text = counterCapture.ToString();
+        feedbackText.GetComponent<FeedbackFloatingText>().activeDestroy();
     }
 }

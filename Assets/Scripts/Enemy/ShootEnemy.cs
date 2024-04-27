@@ -10,13 +10,14 @@ public class ShootEnemy : MonoBehaviour
     [SerializeField] public float speed = 100;
     [SerializeField] public GameObject bullet;
     [SerializeField] public Transform spawnPoint;
-    public static bool isShooting;
-    public EnemyMove e;
+    public static bool isShooting = true;
+    //public EnemyMove e;
     
     void Update()
     {
         //spawnPoint = transform;
-        Shoot();  
+        if(isShooting)
+            Shoot();  
     }
 
     void Shoot()

@@ -8,6 +8,9 @@ TagManager:
   - styler
   - captureObject
   - attack
+  - Canvas
+  - Lake
+  - Illusion
   layers:
   - Default
   - TransparentFX

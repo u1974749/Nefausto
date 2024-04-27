@@ -268,12 +268,14 @@ MonoBehaviour:
   speed: 10
   minDist: 0.6
   pointsLineRenderer: []
-  pointsLineRendererCopy: []
   counterPointsCollide: 0
   counterIntersection: 0
   pointIntersection: {x: 0, y: 0}
   lineColliders: []
   prefabCollider: {fileID: 7529817310002802345, guid: 81d0328069d923c4f8e2e2880f600349, type: 3}
   lineMaxLength: 25
+  counterCapture: 10
   points: []
   pointsCount: 0
+  floatingText: {fileID: 6890199543509282438, guid: b1ff0cf7548eaeb49aa81b0a694d3816, type: 3}
+  life: 5

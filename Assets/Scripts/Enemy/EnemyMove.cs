@@ -16,6 +16,8 @@ public class EnemyMove : MonoBehaviour
     public int waitTimeMax;
 
     public Vector2 currentTarg;
+    public int counterCapture;
+    public bool move = true;
 
     void Start()
     {
@@ -30,7 +32,7 @@ public class EnemyMove : MonoBehaviour
     }
     IEnumerator changeDirection()
     {
-        while (true)
+        while (move)
         {
             RandomDirection();
             Vector3 v = new Vector3(currentTarg.x, 0.75f, currentTarg.y);
@@ -38,5 +40,19 @@ public class EnemyMove : MonoBehaviour
             float time = Random.Range(waitTimeMin, waitTimeMax);
             yield return new WaitForSeconds(time);
         }
+    }
+
+    public void stopMoveEnemy()
+    {
+        move = false;
+        ShootEnemy.isShooting = false;
+        StopCoroutine(changeDirection());
+    }
+
+    public void startMoveEnemy()
+    {
+        move = true;
+        ShootEnemy.isShooting = true;
+        StartCoroutine(changeDirection());
     }
 }
