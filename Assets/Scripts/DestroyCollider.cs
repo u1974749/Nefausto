@@ -10,6 +10,8 @@ public class DestroyCollider : MonoBehaviour
         if(other.CompareTag("captureObject"))
         {
             Debug.Log("CAPTUREOBJECT LOLOLOL");
+            if(other.GetComponent<DestroyIllusion>() != null)
+            GameObject.FindWithTag("Canvas").GetComponent<UIHealth>().Damage();
             GameObject.FindWithTag("styler").GetComponent<captureMove>().ClearColliders(0);
             GameObject.FindWithTag("styler").GetComponent<captureMove>().counterCapture = GameObject.FindWithTag("captureObject").GetComponent<EnemyMove>().counterCapture;
         }

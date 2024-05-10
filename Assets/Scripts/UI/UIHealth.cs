@@ -16,14 +16,10 @@ public class UIHealth : MonoBehaviour
         health = healthMax;
     }
 
-    private void Update()
+    void actualizeHealth()
     {
         healthLabel.text = health.ToString();
         actualizeHealth();
-    }
-
-    void actualizeHealth()
-    {
         healthImage.fillAmount = health / healthMax;
     }
 
@@ -31,11 +27,13 @@ public class UIHealth : MonoBehaviour
     {
         if(health > 0)
             health -= 20;
+        actualizeHealth();
     }
 
     public void Cure()
     {
         if (health < 100)
             health += 20;
+        actualizeHealth();
     }
 }

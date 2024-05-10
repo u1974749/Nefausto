@@ -38,7 +38,7 @@ public class captureMove : MonoBehaviour
 
     //PROOF
     public int counterCapture;
-    bool finishCapture = false;
+    public static bool finishCapture = false;
 
     //EDGE COLLIDERS
     //public EdgeCollider2D edgeCollider;
@@ -94,32 +94,37 @@ public class captureMove : MonoBehaviour
                             //pointsLineRendererCopy = pointsLineRenderer;
                             //if(detectInCircle())
 
-                            if (WindingNumber())
+                            //if (WindingNumber())
+                            List<GameObject> captureObjects = new List<GameObject>(GameObject.FindGameObjectsWithTag("captureObject"));
+                            for(int i = 0; i < captureObjects.Count; i++)
                             {
-                                GameObject captureObject = GameObject.FindWithTag("captureObject");
-                                if (captureObject.GetComponent<DestroyIllusion>() != null)
-                                    captureObject.GetComponent<DestroyIllusion>().eliminateIllusion();
-                                else
+                                if (RayCastPointToPolygon(captureObjects[i].GetComponent<Transform>()))
                                 {
-                                    if (floatingText != null)
+                                    //GameObject captureObject = GameObject.FindWithTag("captureObject");
+                                    if (captureObjects[i].GetComponent<DestroyIllusion>() != null)
+                                        captureObjects[i].GetComponent<DestroyIllusion>().eliminateIllusion();
+                                    else
                                     {
-                                        Debug.Log("I'M IN ?");
-                                        ShowFloatingText();
+                                        if (floatingText != null)
+                                        {
+                                            Debug.Log("I'M IN ?");
+                                            ShowFloatingText();
+                                        }
+                                        counterCapture--;
                                     }
-                                    counterCapture--;
+                                    //
+                                    //REVISADCIOOOOOOOOON
+                                    //---------------------------------------------------------------------
+                                    /*DoubleEnemy checkDouble = GameObject.FindWithTag("captureObject").GetComponent<DoubleEnemy>();
+                                    if (checkDouble == null)
+                                    {
+                                        Debug.Log("LOGRADISMOOOOOO FIESTAAAAAAAA ");
+                                        GameObject captureObject = GameObject.FindWithTag("captureObject");
+                                        captureObject.GetComponent<DoubleEnemy>().deleteDouble(captureObject);
+                                    }*/
                                 }
-                                //
-                                //REVISADCIOOOOOOOOON
-                                //---------------------------------------------------------------------
-                                /*DoubleEnemy checkDouble = GameObject.FindWithTag("captureObject").GetComponent<DoubleEnemy>();
-                                if (checkDouble == null)
-                                {
-                                    Debug.Log("LOGRADISMOOOOOO FIESTAAAAAAAA ");
-                                    GameObject captureObject = GameObject.FindWithTag("captureObject");
-                                    captureObject.GetComponent<DoubleEnemy>().deleteDouble(captureObject);
-                                }*/
+                                else Debug.Log("NO IN");
                             }
-                            else Debug.Log("NO IN");
                             /*if (detectInCircleVersion2())
                             {
                                 counterCapture++;
@@ -136,7 +141,7 @@ public class captureMove : MonoBehaviour
                             //life--;
                             //life_ui.text = life.ToString();
                             Debug.Log("CAPTURE: " + counterCapture);
-                            if (counterCapture == 0) finishCapture = true;
+                            if (counterCapture == -1) finishCapture = true;
                         }
 
                     }
@@ -327,8 +332,8 @@ public class captureMove : MonoBehaviour
         }*/
 
         //COLLINEAR
-        if (first == 0 && onSegment(pointS2First, pointS2Last, pointS1)) return true;
-        if (second == 0 && onSegment(pointS2Last, pointS1, pointS1Last)) return true;
+        //if (first == 0 && onSegment(pointS2First, pointS2Last, pointS1)) return true;
+        //if (second == 0 && onSegment(pointS2Last, pointS1, pointS1Last)) return true;
         if ((first > 0 && second < 0) || (first < 0 && second > 0))
             return true;
         else return false;
@@ -398,8 +403,7 @@ public class captureMove : MonoBehaviour
             return true;
     }*/
 
-    //VERSION 4 DETECT CIRCLE (((((((ACTIVO)))))))))
-
+    //VERSION 4 DETECT CIRCLE
     static int IsLeft(Vector3 a, Vector3 b, Vector3 point)
     {
         return (int)((b.x - a.x) * (point.z - a.z)
@@ -437,6 +441,23 @@ public class captureMove : MonoBehaviour
 
         return wn != 0;
         //return wn%2== 0;
+    }
+
+    //VERSION 5 DETECT CIRCLE (((((((ACTIVO)))))))))
+    public bool RayCastPointToPolygon(Transform captureObject)
+    {
+        List<Vector3> pointsLineAux = pointsLineRenderer;
+        
+        int cnt = 0;
+        int vCount = pointsLineAux.Count;
+        for (int i = counterPointsCollide + 1, j = vCount - 1; i < vCount; j = i++)
+        {
+            var a = pointsLineAux[j];
+            var b = pointsLineAux[i];
+            if (((captureObject.position.z < b.z) != (captureObject.position.z < a.z)) && (captureObject.position.x < (b.x + ((captureObject.position.z - b.z)/(a.z - b.z))*(a.x-b.x))))
+                cnt += 1;
+        }
+        return cnt % 2 == 1;
     }
 
     //VERSION 2 CALCULAR INTERSECCION NO OPERATIVA

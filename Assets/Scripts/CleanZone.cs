@@ -6,27 +6,37 @@ using UnityEngine.InputSystem.Controls;
 
 public class CleanZone : MonoBehaviour
 {
-    bool checkDown = false;
     float speed = 0.3f;
     GameObject lake;
     GameObject lake1;
     GameObject lake2;
+    bool down = false;
+    public Collider col;
 
-    public void OnTriggerEnter(Collider other)
+    private void Update()
     {
-        if (other.CompareTag("Player"))
+        if(down)
         {
-            checkDown = true;
-        }
-    }
-
-    public void Update()
-    {
-        if (checkDown)
-        {
-            SwitchCamera("FirstLakeCamera");
             lake = GameObject.Find("lake");
             lake.transform.position = new Vector3(lake.transform.position.x, lake.transform.position.y - Time.deltaTime * speed, lake.transform.position.z);
+        }
+
+    }
+    public void actualizeLakeVenom()
+    {
+        if (gameObject.GetComponent<selectLights>().checkLights())
+        {
+            SwitchCamera("FirstLakeCamera");
+            gameObject.GetComponent<selectLights>().cleanLights();
+            down = true;
+            GameObject g = GameObject.FindWithTag("styler");
+            if(g != null)
+            {
+                if(g.GetComponent<LineMechanics>() != null)
+                    g.GetComponent<LineMechanics>().DestroyAllColliders();
+                Destroy(g);
+            }
+            Destroy(col);
             //if (lake.transform.position.y < -2) checkDown = false;
             StartCoroutine("activeWait");
         }
@@ -41,7 +51,8 @@ public class CleanZone : MonoBehaviour
         }
         else
         {
-            camAnimator.Play("Main Camera");
+            GameObject.Find("DetectMechanic").GetComponent<BluffMechanic>().SwitchMainCamera();
+            //camAnimator.Play("Main Camera");
         }
     }
 
@@ -49,8 +60,8 @@ public class CleanZone : MonoBehaviour
     {
         yield return new WaitForSeconds(2);
         SwitchCamera("Main Camera");
-        checkDown = false;
         saveLakePosition();
+        down = false;
     }
 
     public void saveLakePosition()

@@ -62,7 +62,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: edee942f13783c74481d6f840ad85847, type: 3}
       propertyPath: m_Name
-      value: flamaProof
+      value: Mechanics
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: edee942f13783c74481d6f840ad85847, type: 3}
       propertyPath: m_TagString
@@ -95,7 +95,7 @@ PrefabInstance:
       addedObject: {fileID: 1565567113711472005}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: edee942f13783c74481d6f840ad85847, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6356038514451911737}
+      addedObject: {fileID: 1338754558051925653}
   m_SourcePrefab: {fileID: 100100000, guid: edee942f13783c74481d6f840ad85847, type: 3}
 --- !u!1 &1673720520894772170 stripped
 GameObject:
@@ -146,7 +146,7 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Radius: 1.2148162
   m_Center: {x: 0, y: 0, z: 0}
@@ -253,7 +253,7 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!114 &6356038514451911737
+--- !u!114 &1338754558051925653
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -262,20 +262,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1673720520894772170}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26d6bf240234b704dadfc87a3838585b, type: 3}
+  m_Script: {fileID: 11500000, guid: 9958aeb1fdc8ffe41890a8cd63e4f3e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
   minDist: 0.6
   pointsLineRenderer: []
-  counterPointsCollide: 0
-  counterIntersection: 0
-  pointIntersection: {x: 0, y: 0}
   lineColliders: []
   prefabCollider: {fileID: 7529817310002802345, guid: 81d0328069d923c4f8e2e2880f600349, type: 3}
   lineMaxLength: 25
-  counterCapture: 10
-  points: []
-  pointsCount: 0
-  floatingText: {fileID: 6890199543509282438, guid: b1ff0cf7548eaeb49aa81b0a694d3816, type: 3}
-  life: {fileID: 0}

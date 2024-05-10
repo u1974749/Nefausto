@@ -9,14 +9,16 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private Rigidbody rigidbodyPlayer;
     [SerializeField] private FixedJoystick joystick;
     [SerializeField] private Animator animator;
-    //public static Transform faustoPosition;
+    public static Transform faustoPosition;
 
     [SerializeField] private float speed;
-
-    /*private void Start()
+    bool seejecuto = false;
+    private void Start()
     {
-        transform.position = faustoPosition.position;
-    }*/
+        StartCoroutine(loadPlayerPos());
+    }
+
+    //lilxurrus estuvo awuí
 
     // Start is called before the first frame update
     /*private void Awake()
@@ -52,8 +54,22 @@ public class PlayerMove : MonoBehaviour
 
     public void loadPlayerPosition()
     {
-        //Debug.Log("LOAD POSITION :::" + PlayerPrefs.GetFloat("PlayerX") + " " + PlayerPrefs.GetFloat("PlayerY") + " " + PlayerPrefs.GetFloat("PlayerZ"));
-        transform.position = new Vector3(PlayerPrefs.GetFloat("PlayerX"), PlayerPrefs.GetFloat("PlayerY"), PlayerPrefs.GetFloat("PlayerZ"));
+        Vector3 pos = new Vector3(PlayerPrefs.GetFloat("PlayerX"), PlayerPrefs.GetFloat("PlayerY"), PlayerPrefs.GetFloat("PlayerZ"));
+        Debug.Log("LOAD POSITION: " + pos);
+        // rigidbodyPlayer.isKinematic = true;
+        transform.position = pos;
+        // rigidbodyPlayer.isKinematic = false;
+        Debug.Log("Posicion player: " + transform.position);
+    }
 
+    IEnumerator loadPlayerPos()
+    {
+        yield return new WaitForEndOfFrame();
+        Vector3 pos = new Vector3(PlayerPrefs.GetFloat("PlayerX"), PlayerPrefs.GetFloat("PlayerY"), PlayerPrefs.GetFloat("PlayerZ"));
+        Debug.Log("LOAD POSITION: " + pos);
+        // rigidbodyPlayer.isKinematic = true;
+        transform.position = pos;
+        // rigidbodyPlayer.isKinematic = false;
+        Debug.Log("Posicion player: " + transform.position);
     }
 }

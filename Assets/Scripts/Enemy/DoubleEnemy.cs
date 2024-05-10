@@ -7,6 +7,7 @@ public class DoubleEnemy : MonoBehaviour
     public GameObject enemy;
     public List<GameObject> illusion = new List<GameObject>();
     [SerializeField] public Transform spawnPoint;
+    [SerializeField] public Transform spawnPoint2;
 
     void Update()
     {
@@ -22,6 +23,7 @@ public class DoubleEnemy : MonoBehaviour
             if(illusion.Count == 0)
             {
                 illusion.Add(Instantiate(enemy, spawnPoint.position, Quaternion.identity));
+                illusion.Add(Instantiate(enemy, spawnPoint2.position, Quaternion.identity));
                 Debug.Log("DATE CUENTA ");
             }
         //}
@@ -32,16 +34,19 @@ public class DoubleEnemy : MonoBehaviour
         bool founded = false;
         int i = 0;
 
-        while(!founded && i < illusion.Count)
+        if (illusion.Contains(copy))
         {
-            if (copy == illusion[i])
+            while(!founded && i < illusion.Count)
             {
-                GameObject g = illusion[i];
-                illusion.RemoveAt(i);
-                Destroy(g);
-                founded = true;
+                if (copy == illusion[i])
+                {
+                    GameObject g = illusion[i];
+                    illusion.RemoveAt(i);
+                    Destroy(g);
+                    founded = true;
+                }
+                else i++;
             }
-            else i++;
         }
     }
 }

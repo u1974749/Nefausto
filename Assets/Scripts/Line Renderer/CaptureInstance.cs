@@ -23,9 +23,19 @@ public class CaptureInstance : MonoBehaviour
             GameObject cp = GameObject.FindWithTag("styler");
             if(cp != null)
             {
-                cp.GetComponent<captureMove>().ClearColliders(-1);
+                if(cp.GetComponent<captureMove>() != null)
+                    cp.GetComponent<captureMove>().ClearColliders(-1);
+                if(cp.GetComponent<LineMechanics>() != null)
+                    cp.GetComponent<LineMechanics>().DestroyAllColliders();
                 Destroy(cp);
+                Debug.Log("destroy");
             }
+            //if (captureMove.finishCapture)
+            //{
+                //obtener canvas con captura completada
+                //animacion de captura conseguida
+
+            //}
         }
     }
 }
