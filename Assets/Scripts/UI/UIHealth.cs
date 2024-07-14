@@ -8,7 +8,7 @@ public class UIHealth : MonoBehaviour
 {
     public Image healthImage;
     public TMP_Text healthLabel;
-    public static float health;
+    public float health;
     public float healthMax = 100;
 
     private void Start()
@@ -19,7 +19,6 @@ public class UIHealth : MonoBehaviour
     void actualizeHealth()
     {
         healthLabel.text = health.ToString();
-        actualizeHealth();
         healthImage.fillAmount = health / healthMax;
     }
 
@@ -27,6 +26,7 @@ public class UIHealth : MonoBehaviour
     {
         if(health > 0)
             health -= 20;
+        Debug.Log("DAMAGE");
         actualizeHealth();
     }
 
@@ -35,5 +35,10 @@ public class UIHealth : MonoBehaviour
         if (health < 100)
             health += 20;
         actualizeHealth();
+    }
+
+    public float Health()
+    {
+        return health;
     }
 }

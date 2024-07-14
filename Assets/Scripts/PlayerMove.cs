@@ -12,15 +12,11 @@ public class PlayerMove : MonoBehaviour
     public static Transform faustoPosition;
 
     [SerializeField] private float speed;
-    bool seejecuto = false;
     private void Start()
     {
         StartCoroutine(loadPlayerPos());
     }
 
-    //lilxurrus estuvo awuí
-
-    // Start is called before the first frame update
     /*private void Awake()
     {
         if (PlayerPrefs.HasKey("PlayerX") && PlayerPrefs.HasKey("PlayerY") && PlayerPrefs.HasKey("PlayerZ"))
@@ -34,8 +30,14 @@ public class PlayerMove : MonoBehaviour
     private void FixedUpdate()
     {
         rigidbodyPlayer.velocity = new Vector3(joystick.Horizontal * speed, rigidbodyPlayer.velocity.y, joystick.Vertical * speed);
-        if(joystick.Horizontal != 0 || joystick.Vertical != 0)
+        if (joystick.Horizontal != 0 || joystick.Vertical != 0)
+        {
             transform.rotation = Quaternion.LookRotation(rigidbodyPlayer.velocity);
+            //AudioSource sound = gameObject.GetComponent<AudioSource>();
+            //if (!sound.isPlaying)
+                //sound.PlayOneShot(sound.clip);
+        }
+        //else gameObject.GetComponent<AudioSource>().Stop();
         //loadPlayerPosition();
         //faustoPosition = transform;
     }

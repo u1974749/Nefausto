@@ -6,7 +6,6 @@ public class DestroyIllusion : MonoBehaviour
 {
     public void eliminateIllusion()
     {
-        Debug.Log("ON BITCHES");
         Destroy(gameObject);
     }
 }

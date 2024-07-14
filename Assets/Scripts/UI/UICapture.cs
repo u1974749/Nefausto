@@ -16,6 +16,14 @@ public class UICapture : MonoBehaviour
     public void IgnoreOption()
     {
         options.SetActive(false);
-        GameObject.Find("DialogueVacioIntroduction").GetComponent<Test_Architect>().offOptions();
+        GameObject dialogue = GameObject.Find("Vacio");
+        if(dialogue != null)
+            dialogue.GetComponent<Test_Architect>().offOptions();
+        dialogue = GameObject.Find("Bocazas");
+        if(dialogue != null)
+            dialogue.GetComponent<Test_Architect>().offOptions();
+        dialogue = GameObject.Find("Hook");
+        if (dialogue != null)
+            dialogue.GetComponent<Test_Architect>().offOptions();
     }
 }

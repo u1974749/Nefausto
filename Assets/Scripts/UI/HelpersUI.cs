@@ -17,6 +17,12 @@ public class HelpersUI : MonoBehaviour
 
     public void ActiveHelpers()
     {
+        GameObject cp = GameObject.FindWithTag("styler");
+        if (cp != null)
+        {
+            cp.GetComponent<captureMove>().ClearColliders(0);
+            Destroy(cp);
+        }
         GameObject CaptureObject = GameObject.FindWithTag("captureObject");
         CaptureObject.GetComponent<EnemyMove>().stopMoveEnemy();
         CaptureInstance.instanceFlama = false;

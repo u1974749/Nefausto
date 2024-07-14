@@ -1,14 +1,10 @@
 using System;
-using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEditor;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
-using TMPro;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.VFX;
 
 public class captureMove : MonoBehaviour
 {
@@ -48,11 +44,23 @@ public class captureMove : MonoBehaviour
     //FEEDBACK
     public GameObject floatingText;
 
+    //FOG
+    private GameObject fogController;
+    public static bool flamaDisolveFog = false;
+    public GameObject shineCenter;
+    public Material matShine;
+    //fogController.SetVector3("ColliderPos",transform.position);
+    //fogController.SetFloat("CleanFog",1);
+
+    //CURIOUS FEEDBACK
+    public static bool changeMaterial = false;
+    public Material materialOriginal;
+
     //DEBUG
     public UIHealth life;
     //public TextMeshProUGUI life_ui;
-    public static bool captureSad = true;
-    public static bool captureCuriosity = false;
+    public static bool captureSad = false;
+    public static bool captureCuriosity = true;
     public static bool captureHook = false;
     public static bool captureDeath = false;
 
@@ -66,6 +74,11 @@ public class captureMove : MonoBehaviour
         lineRenderer.SetPosition(0, transform.position);
         pointsLineRenderer.Add(transform.position);
         counterCapture = GameObject.FindWithTag("captureObject").GetComponent<EnemyMove>().counterCapture;
+        if(flamaDisolveFog)
+        {
+            fogController = GameObject.Find("Fog");
+            fogController.GetComponent<VisualEffect>().SetBool("CleanFog", true);
+        }
     }
     void Update()
     {
@@ -79,6 +92,13 @@ public class captureMove : MonoBehaviour
                 {
                     transform.position = Vector3.MoveTowards(transform.position, hit.point, Time.deltaTime * speed);
                     transform.LookAt(new Vector3(hit.point.x, transform.position.y, hit.point.z));
+
+                    if (flamaDisolveFog)
+                    {
+                        fogController.GetComponent<VisualEffect>().SetFloat("ColliderPosX", hit.point.x);
+                        fogController.GetComponent<VisualEffect>().SetFloat("ColliderPosZ", hit.point.z+10);
+                        shineCenter.GetComponent<MeshRenderer>().material = matShine;
+                    }
                     if (lineRenderer.positionCount >= 4)
                     {
                         /*if(checkCollision())
@@ -92,9 +112,6 @@ public class captureMove : MonoBehaviour
                         if (checkIntersection())
                         {
                             //pointsLineRendererCopy = pointsLineRenderer;
-                            //if(detectInCircle())
-
-                            //if (WindingNumber())
                             List<GameObject> captureObjects = new List<GameObject>(GameObject.FindGameObjectsWithTag("captureObject"));
                             for(int i = 0; i < captureObjects.Count; i++)
                             {
@@ -113,7 +130,7 @@ public class captureMove : MonoBehaviour
                                         counterCapture--;
                                     }
                                     //
-                                    //REVISADCIOOOOOOOOON
+                                    //REVISACIOOOOOOOOON
                                     //---------------------------------------------------------------------
                                     /*DoubleEnemy checkDouble = GameObject.FindWithTag("captureObject").GetComponent<DoubleEnemy>();
                                     if (checkDouble == null)
@@ -123,7 +140,6 @@ public class captureMove : MonoBehaviour
                                         captureObject.GetComponent<DoubleEnemy>().deleteDouble(captureObject);
                                     }*/
                                 }
-                                else Debug.Log("NO IN");
                             }
                             /*if (detectInCircleVersion2())
                             {
@@ -135,7 +151,7 @@ public class captureMove : MonoBehaviour
                             lineRenderer.SetPosition(0, antPosition);
                             pointsLineRenderer.Clear();
                             pointsLineRenderer.Add(antPosition);
-                            DestroyAllColliders();
+                            ClearColliders(2);
                             GameObject g = Instantiate(prefabCollider, transform.position, Quaternion.identity);
                             lineColliders.Add(g);
                             //life--;
@@ -211,15 +227,16 @@ public class captureMove : MonoBehaviour
             //save dates if complete capture
             //change scene en la posicion indicada
             GameObject captureObject = GameObject.FindWithTag("captureObject");
-            if (captureObject.name == "BELIAL_Lineart") //CHANGE NAME
+            if (captureObject.name == "Sad") //CHANGE NAME
                 captureSad = true;
-            else if (captureObject.name == "Curiosity")
+            else if (captureObject.name == "Curious")
                 captureCuriosity = true;
             else if (captureObject.name == "Hook")
                 captureHook = true;
-            SceneManager.LoadScene("SampleScene");
+            finishCapture = false;
+            GameObject.FindWithTag("GameController").GetComponent<SelectInatanceEnemy>().CaptureFinishUI();
         }
-        if(UIHealth.health <= 0)
+        if(GameObject.FindWithTag("Canvas").GetComponent<UIHealth>().Health() <= 0)
         {
             captureDeath = true; ///QUITAR EN EL DIALOGO
             SceneManager.LoadScene("SampleScene");
@@ -241,23 +258,46 @@ public class captureMove : MonoBehaviour
     public void ClearColliders(int option)
     {
         //if option == 0 is a enemy, else if option == 1 is a attack
-
-        if (option == 0)
-        {
-            //ANIMATION CONFUSE + PARTICLES
-        }
-        else if (option == 1)
-        {
-            //ANIMATION EXPLODE STYLER + PARTICLES
-            GameObject.FindWithTag("Canvas").GetComponent<UIHealth>().Damage();
-            //life_ui.text = life.ToString();
-            //Debug.Log("LIFE: " + life);
-        }
-
         lineRenderer.positionCount = 1;
         lineRenderer.SetPosition(0, antPosition);
         pointsLineRenderer.Clear();
         pointsLineRenderer.Add(antPosition);
+        switch (option)
+        {
+            case 0: //ENEMY COLLISION
+            {
+                    //ANIMATION CONFUSE + PARTICLES
+                    Debug.Log("CHOQUE");
+                for (int i = 0; i < lineColliders.Count; i++)
+                    lineColliders[i].GetComponent<VisualEffect>().Play();
+            }
+                break;
+            case 1: //ATTACK
+            {
+                    Debug.Log("ATAQUE");
+                //ANIMATION EXPLODE STYLER + PARTICLES
+                for (int i = 0; i < lineColliders.Count; i++)
+                {
+                    lineColliders[i].GetComponent<VisualEffect>().SetBool("Explosion", true);
+                    lineColliders[i].GetComponent<VisualEffect>().Play();
+                }
+                //life_ui.text = life.ToString();
+                //Debug.Log("LIFE: " + life);
+            }
+                break;
+            case 2: //PLAYER STYLER INTERSECTION
+            {
+                for (int i = 0; i < lineColliders.Count; i++)
+                    lineColliders[i].GetComponent<VisualEffect>().Play();
+            }
+                break;
+        }
+        StartCoroutine(waitParticles());
+    }
+
+    IEnumerator waitParticles()
+    {
+        yield return new WaitForSeconds(0.2f);
         DestroyAllColliders();
     }
 
@@ -279,7 +319,6 @@ public class captureMove : MonoBehaviour
             else if (checkSegmentIntersection(lastPoint2, lastPoint1, currentPoint2, currentPoint1))
             {
                 //else if(doIntersect(lastPoint2,lastPoint1,currentPoint2,currentPoint1))
-                Debug.Log("INTERSECTION");
                 counterPointsCollide = i;
                 pointIntersection = calculateIntersection(lastPoint2, lastPoint1, currentPoint2, currentPoint1);
 
@@ -518,5 +557,15 @@ public class captureMove : MonoBehaviour
         GameObject feedbackText = Instantiate(floatingText, pos, Quaternion.LookRotation(rot), captureObject.transform);
         feedbackText.GetComponent<TextMesh>().text = counterCapture.ToString();
         feedbackText.GetComponent<FeedbackFloatingText>().activeDestroy();
+    }
+
+    public void ChangeMaterialLine()
+    {
+        gameObject.GetComponent<LineRenderer>().material = materialOriginal;
+    }
+
+    public void delete()
+    {
+        Destroy(gameObject);
     }
 }

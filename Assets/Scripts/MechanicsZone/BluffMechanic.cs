@@ -8,13 +8,19 @@ public class BluffMechanic : MonoBehaviour
     public GameObject buttonMainCamera;
     public GameObject joystick;
     public GameObject line;
+    public GameObject lampTutorial;
+    public GameObject iconCat;
     bool activeMechanic = false;
+    public bool firstLake = false;
+    public bool secondLake = false;
+    public bool activeTutorial = true;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")
         {
             activeMechanic = true;
+            iconCat.SetActive(true);
         }
     }
 
@@ -23,19 +29,38 @@ public class BluffMechanic : MonoBehaviour
         if (other.tag == "Player")
         {
             activeMechanic = false;
+            iconCat.SetActive(false);
         }
     }
 
     public void SwitchBluffCamera()
     {
         Animator camAnimator = GameObject.Find("CameraController").GetComponent<Animator>();
+        iconCat.SetActive(false);
         if (activeMechanic)
         {
-            camAnimator.Play("BluffMechanic");
+            if (firstLake)
+            {
+                //firstLake = false;
+                LineMechanics.floorName = "DetectMechanic";
+                camAnimator.Play("BluffMechanic");
+            }
+            else if (secondLake)
+            {
+                //secondLake = false;
+                LineMechanics.floorName = "DetectMechanic (1)";
+                camAnimator.Play("BluffMechanicTwo");
+            }
+            line.SetActive(true);
             buttonNormal.SetActive(false);
             joystick.SetActive(false);
             buttonMainCamera.SetActive(true);
-            line.SetActive(true);
+            if (activeTutorial)
+            {
+                lampTutorial.SetActive(true);
+                activeTutorial = false;
+                StartCoroutine(activeLampTut());
+            }
         }
     }
 
@@ -48,5 +73,24 @@ public class BluffMechanic : MonoBehaviour
         buttonMainCamera.SetActive(false);
         line.SetActive(false);
         activeMechanic = false;
+
+        GameObject g = GameObject.FindWithTag("styler");
+        if (g != null)
+        {
+            if (g.GetComponent<LineMechanics>() != null)
+                g.GetComponent<LineMechanics>().DestroyAllColliders();
+            Destroy(g);
+        }
+    }
+
+    IEnumerator activeLampTut()
+    {
+        yield return new WaitForSeconds(2);
+        lampTutorial.SetActive(false);
+    }
+
+    public void changeActiveMechanic()
+    {
+        activeMechanic = !activeMechanic;
     }
 }

@@ -7,7 +7,6 @@ public class chargePositions : MonoBehaviour
     public GameObject player;
     public GameObject lake;
     public GameObject lake1;
-    public GameObject lake2;
 
     void Awake()
     {
@@ -19,13 +18,9 @@ public class chargePositions : MonoBehaviour
         {
             lake.transform.position = new Vector3(PlayerPrefs.GetFloat("VenonX"), PlayerPrefs.GetFloat("VenonY"), PlayerPrefs.GetFloat("VenonZ"));
         }
-        if (PlayerPrefs.HasKey("Venon1X") && PlayerPrefs.HasKey("Venon1Y") && PlayerPrefs.HasKey("Venon1Z"))
+        if (PlayerPrefs.HasKey("VenonXTwo") && PlayerPrefs.HasKey("VenonYTwo") && PlayerPrefs.HasKey("VenonZTwo"))
         {
-            lake.transform.position = new Vector3(PlayerPrefs.GetFloat("Venon1X"), PlayerPrefs.GetFloat("Venon1Y"), PlayerPrefs.GetFloat("Venon1Z"));
-        }
-        if (PlayerPrefs.HasKey("Venon2X") && PlayerPrefs.HasKey("Venon2Y") && PlayerPrefs.HasKey("Venon2Z"))
-        {
-            lake.transform.position = new Vector3(PlayerPrefs.GetFloat("Venon2X"), PlayerPrefs.GetFloat("Venon2Y"), PlayerPrefs.GetFloat("Venon2Z"));
+            lake1.transform.position = new Vector3(PlayerPrefs.GetFloat("VenonXTwo"), PlayerPrefs.GetFloat("VenonYTwo"), PlayerPrefs.GetFloat("VenonZTwo"));
         }
     }
 }

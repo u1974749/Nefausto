@@ -19,10 +19,20 @@ public class EnemyMove : MonoBehaviour
     public int counterCapture;
     public bool move = true;
 
+    public bool waitTutorial = true;
+
     void Start()
     {
-        RandomDirection();
-        StartCoroutine(changeDirection());
+        if(waitTutorial)
+        {
+            waitTutorial = false;
+            StartCoroutine(waitTut());
+        }
+        else
+        {
+            RandomDirection();
+            StartCoroutine(changeDirection());
+        }
     }
 
     private void RandomDirection()
@@ -40,6 +50,13 @@ public class EnemyMove : MonoBehaviour
             float time = Random.Range(waitTimeMin, waitTimeMax);
             yield return new WaitForSeconds(time);
         }
+    }
+
+    IEnumerator waitTut()
+    {
+        yield return new WaitForSeconds(8);
+        RandomDirection();
+        StartCoroutine(changeDirection());
     }
 
     public void stopMoveEnemy()

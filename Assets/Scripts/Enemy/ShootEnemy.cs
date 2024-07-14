@@ -10,9 +10,14 @@ public class ShootEnemy : MonoBehaviour
     [SerializeField] public float speed = 100;
     [SerializeField] public GameObject bullet;
     [SerializeField] public Transform spawnPoint;
-    public static bool isShooting = true;
+    public static bool isShooting = false;
     //public EnemyMove e;
-    
+
+    private void Start()
+    {
+        StartCoroutine(waitTut());
+    }
+
     void Update()
     {
         //spawnPoint = transform;
@@ -37,5 +42,11 @@ public class ShootEnemy : MonoBehaviour
         GameObject bulletObject = Instantiate(bullet, spawnPoint.position, transform.rotation);
         bulletObject.GetComponent<Rigidbody>().velocity = transform.forward * speed; // Asigna la velocidad al proyectil
         Destroy(bulletObject, 5f);
+    }
+
+    IEnumerator waitTut()
+    {
+        yield return new WaitForSeconds(8);
+        isShooting = true;
     }
 }

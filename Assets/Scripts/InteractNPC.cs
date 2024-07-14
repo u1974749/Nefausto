@@ -6,35 +6,27 @@ public class InteractNPC : MonoBehaviour
 {
     //private Camera cam; //camera
     private GameObject fausto; //collision floor
-    public static int enemyInstance = 0; //select enemy
+    public static int enemyInstance = 0; //select enemy 0-Sad 1-Curious 2-Hook
     //RaycastHit hit;
     //Ray ray; //raycast
     //[SerializeField] private float minDist; //distance with points
 
-    /*private void Start()
-    {
-        cam = GameObject.Find("Main Camera").GetComponent<Camera>();
-        fausto = GameObject.Find("Fausto");
-    }*/
-
     public void interactNPC()
     {
-        fausto = GameObject.Find("Fausto");
+        fausto = GameObject.Find("FaustoModel");
         if (Vector3.Distance(transform.position, fausto.transform.position) <= 5)
         {
-            Debug.Log("TRAIL ON");
-            if (this.name == "BELIAL_Lineart")
+            if (this.name == "EmptyModel")
             {
-                GetComponent<VacíoDialogue>().ActiveIntroduction();
-                Debug.Log("BELIAL ON");
                 enemyInstance = 0;
+                
+
             }
-            else if (this.name == "trail_cM")
-            {
-                GetComponent<VacíoDialogue>().ActiveIntroduction();
-                Debug.Log("TRAIL ON");
+            else if (this.name == "LouderModel")
                 enemyInstance = 1;
-            }
+            else if (this.name == "FabioModel")
+                enemyInstance = 2;
+            GetComponent<NPCDialogue>().ActiveIntroduction();
         }
     }
 

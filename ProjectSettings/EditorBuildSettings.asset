@@ -11,5 +11,11 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Capture.unity
     guid: 5e43520b7de059f4f8b0197ed58fa731
+  - enabled: 1
+    path: Assets/Scenes/Menu.unity
+    guid: f499a155326d4f44f9e8065bd3519331
+  - enabled: 1
+    path: Assets/Scenes/Charge.unity
+    guid: 688aad05ef96dc54f8f9ec26a415e8f5
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

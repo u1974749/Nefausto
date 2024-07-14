@@ -26,6 +26,11 @@ public class DoubleEnemy : MonoBehaviour
                 illusion.Add(Instantiate(enemy, spawnPoint2.position, Quaternion.identity));
                 Debug.Log("DATE CUENTA ");
             }
+            else if (illusion[0] == null && illusion[1] == null)
+            {
+                illusion[0] = Instantiate(enemy, spawnPoint.position, Quaternion.identity);
+                illusion[1] = Instantiate(enemy, spawnPoint2.position, Quaternion.identity);
+            }
         //}
     }
 

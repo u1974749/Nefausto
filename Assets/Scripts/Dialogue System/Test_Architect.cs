@@ -16,7 +16,7 @@ namespace TESTING
         [SerializeField] GameObject canvas;
         [SerializeField] GameObject controls;
         [SerializeField] GameObject character;
-        [SerializeField] TextMeshProUGUI name;
+        [SerializeField] TextMeshProUGUI newName;
         [SerializeField] GameObject dialogue;
         [SerializeField] GameObject options;
         bool activeOptions = false;
@@ -24,11 +24,7 @@ namespace TESTING
         // Start is called before the first frame update
         /*string[] lines = new string[5]
         {
-            "Hi, Mencía! Do you want some information about criatures?",
-            "The criature...",
-            "I think it's a white cat with a horn.",
-            "If you see, the cat have the tongue out.",
-            "Sound crazy! The Gatipedro steal the offering."
+            "The criature..."
         };*/
         void Start()
         {
@@ -36,7 +32,7 @@ namespace TESTING
             architect = new TextArchitect(ds.dialogueContainer.dialogueText);
             architect.buildMethod = TextArchitect.BuildMethod.typewriter;
             architect.speed = 0.5f;
-            name.text = "Nefausto";
+            newName.text = gameObject.name;
             n=0;
             architect.Build(lines[n]);
             n++;
@@ -51,7 +47,6 @@ namespace TESTING
 
                 if(architect.checkBuild)
                 {
-                    Debug.Log("Building");
                     architect.ForceComplete();
                 }
                 else if (n == lines.Length)
@@ -72,7 +67,6 @@ namespace TESTING
                 }
                 else
                 {    
-                    Debug.Log("n " + n);
                     architect.Build(lines[n]);
                     n++;
                 }
@@ -93,7 +87,7 @@ namespace TESTING
             dialogue.SetActive(false);
             canvas.SetActive(false);
             controls.SetActive(true);
-            n = 0;
+            //n = 0;
         }
     }
 }

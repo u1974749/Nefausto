@@ -265,7 +265,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26d6bf240234b704dadfc87a3838585b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
+  speed: 25
   minDist: 0.6
   pointsLineRenderer: []
   counterPointsCollide: 0
@@ -273,9 +273,17 @@ MonoBehaviour:
   pointIntersection: {x: 0, y: 0}
   lineColliders: []
   prefabCollider: {fileID: 7529817310002802345, guid: 81d0328069d923c4f8e2e2880f600349, type: 3}
-  lineMaxLength: 25
+  lineMaxLength: 30
   counterCapture: 10
   points: []
   pointsCount: 0
   floatingText: {fileID: 6890199543509282438, guid: b1ff0cf7548eaeb49aa81b0a694d3816, type: 3}
+  shineCenter: {fileID: 2782603735018014393}
+  matShine: {fileID: 2100000, guid: 3925f0b6c42a5ad47bc50a7ff299a268, type: 2}
+  materialOriginal: {fileID: 2100000, guid: 69350c7f2031dd5498dcb87072583cda, type: 2}
   life: {fileID: 0}
+--- !u!1 &2782603735018014393 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4424396828587804706, guid: edee942f13783c74481d6f840ad85847, type: 3}
+  m_PrefabInstance: {fileID: 2016299969878412955}
+  m_PrefabAsset: {fileID: 0}

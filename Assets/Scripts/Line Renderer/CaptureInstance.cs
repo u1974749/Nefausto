@@ -9,14 +9,22 @@ public class CaptureInstance : MonoBehaviour
     public Collider floor;
     [SerializeField] private float speed;
     public static bool instanceFlama = true;
+    public string cleanerName = "";
+
+    public Material materialShine;
 
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
+            //Debug.Log(System.Environment.MachineName); name of computer
             Vector3 touch = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 6.3f));
             if(instanceFlama)
-                Instantiate(linePrefab, touch, Quaternion.identity);
+            {
+                GameObject line = Instantiate(linePrefab, touch, Quaternion.identity);
+                if(captureMove.changeMaterial)
+                    line.GetComponent<LineRenderer>().material = materialShine;
+            }
         }
         else if (Input.GetMouseButtonUp(0))
         {
@@ -24,18 +32,23 @@ public class CaptureInstance : MonoBehaviour
             if(cp != null)
             {
                 if(cp.GetComponent<captureMove>() != null)
+                {
                     cp.GetComponent<captureMove>().ClearColliders(-1);
-                if(cp.GetComponent<LineMechanics>() != null)
+                    StartCoroutine(waitDestroy(cp));
+                }
+                else if(cp.GetComponent<LineMechanics>() != null)
+                {
+                    GameObject.Find(cleanerName).GetComponent<selectLights>().cleanLights();
                     cp.GetComponent<LineMechanics>().DestroyAllColliders();
-                Destroy(cp);
-                Debug.Log("destroy");
+                    Destroy(cp);
+                }
             }
-            //if (captureMove.finishCapture)
-            //{
-                //obtener canvas con captura completada
-                //animacion de captura conseguida
-
-            //}
         }
+    }
+
+    IEnumerator waitDestroy(GameObject cp)
+    {
+        yield return new WaitForSeconds(0.2f);
+        Destroy(cp);
     }
 }

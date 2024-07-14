@@ -8,6 +8,7 @@ public class LineMechanics : MonoBehaviour
     //DRAW LINE RENDERER
     private Camera cam; //camera
     private Collider floor; //collision floor
+    public static string floorName = "DetectMechanic"; //collision floor
     [SerializeField] private float speed; //speed of object follow
     RaycastHit hit;
     Ray ray; //raycast
@@ -26,12 +27,12 @@ public class LineMechanics : MonoBehaviour
     public int lineMaxLength = 25;
 
     //CLEANER
-    public GameObject cleaner;
+    //public GameObject cleaner;
 
     private void Start()
     {
         cam = GameObject.Find("Main Camera").GetComponent<Camera>();
-        floor = GameObject.Find("DetectMechanic").GetComponent<Collider>();
+        floor = GameObject.Find(floorName).GetComponent<Collider>();
         lineRenderer = GetComponent<LineRenderer>();
         antPosition = transform.position;
         lineRenderer.positionCount = 1;
@@ -62,8 +63,16 @@ public class LineMechanics : MonoBehaviour
                             DestroyAllColliders();
                             GameObject g = Instantiate(prefabCollider, transform.position, Quaternion.identity);
                             lineColliders.Add(g);
-                            cleaner.GetComponent<selectLights>().cleanLights();
-                            changeLights();
+                            if (floorName == "DetectMechanic")
+                            {
+                                GameObject.Find("Cleaner").GetComponent<selectLights>().cleanLights();
+                                changeLights("Cleaner");
+                            }
+                            else if (floorName == "DetectMechanic (1)")
+                            {
+                                GameObject.Find("Cleaner (1)").GetComponent<selectLights>().cleanLights();
+                                changeLights("Cleaner (1)");
+                            }
                         }
 
                     }
@@ -104,8 +113,8 @@ public class LineMechanics : MonoBehaviour
     //DELETE COLLIDER
     public void DestroyAllColliders()
     {
-        GameObject cleaner = GameObject.Find("Cleaner");
-        cleaner.GetComponent<selectLights>().cleanLights();
+        //GameObject cleaner = GameObject.Find("Cleaner");
+        //cleaner.GetComponent<selectLights>().cleanLights();
         lineRenderer.positionCount = 1;
         lineRenderer.SetPosition(0, antPosition);
         pointsLineRenderer.Clear();
@@ -166,13 +175,22 @@ public class LineMechanics : MonoBehaviour
         else return false;
     }
 
-    public void changeLights()
+    public void changeLights(string cleaner)
     {
-        List<GameObject> f = new List<GameObject>(GameObject.FindGameObjectsWithTag("farol"));
+        GameObject g = GameObject.Find(cleaner);
+
+        DetectLight[] f = g.GetComponentsInChildren<DetectLight>();
+        for (int i = 0; i < f.Length; i++)
+        {
+            f[i].gameObject.GetComponent<DetectLight>().OffLight();
+            //Do something with myChildScript
+        }
+        
+        /*List<GameObject> f = new List<GameObject>(GameObject.FindGameObjectsWithTag("farol"));
         
         for(int i=0; i < f.Count; i++)
         {
             f[i].gameObject.GetComponent<DetectLight>().OffLight();
-        }
+        }*/
     }
 }
