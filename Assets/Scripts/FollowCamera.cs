@@ -12,6 +12,7 @@ public class FollowCamera : MonoBehaviour
     private void Awake()
     {
         offset = transform.position - target.position;
+        Application.targetFrameRate = 60;
     }
 
     private void LateUpdate()

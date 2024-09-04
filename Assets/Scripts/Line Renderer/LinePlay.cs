@@ -24,7 +24,6 @@ public class LinePlay : MonoBehaviour
             ray = cam.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit))
             {
-                Debug.DrawRay(transform.position, hit.point, Color.green);
                 if (hit.collider == floor)
                 {
                     transform.position = Vector3.MoveTowards(transform.position, hit.point, Time.deltaTime * speed);

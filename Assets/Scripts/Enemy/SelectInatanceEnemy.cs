@@ -5,16 +5,23 @@ using UnityEngine.SceneManagement;
 
 public class SelectInatanceEnemy : MonoBehaviour
 {
-    // Start is called before the first frame update
     public GameObject sad;
     public GameObject curiosity;
     public GameObject hook;
+    public GameObject parasityOne;
+    public GameObject parasityTwo;
     public GameObject fog;
 
     public GameObject UICapture;
     public GameObject UICaptureSad;
     public GameObject UICaptureCurious;
     public GameObject UICaptureHook;
+    public GameObject UICaptureParasity;
+    public GameObject UIFlamitaInactive;
+    public GameObject UIHand;
+    public bool captureFail = false;
+
+    public bool sceneReset = false;
 
     void Start()
     {
@@ -26,6 +33,40 @@ public class SelectInatanceEnemy : MonoBehaviour
         {
             hook.SetActive(true);
             fog.SetActive(true);
+            if(!captureMove.captureSad || !captureMove.captureCuriosity)
+            {
+                UIFlamitaInactive.SetActive(true);
+                sceneReset = true;
+                captureFail = true;
+            }
+            else
+            {
+                UIHand.SetActive(true);
+                StartCoroutine("handInactive");
+            }
+        }
+        else if (InteractNPC.enemyInstance == 3)
+            parasityOne.SetActive(true);
+        else if (InteractNPC.enemyInstance == 4)
+            parasityTwo.SetActive(true);
+    }
+
+    IEnumerator handInactive()
+    {
+        yield return new WaitForSeconds(2);
+        UIHand.SetActive(false);
+    }
+
+    public void Update()
+    {
+        if (Input.GetMouseButton(0) && sceneReset)
+        {
+            CaptureInstance.instanceFlama = true;
+            if(captureMove.captureHook)
+                SceneManager.LoadScene("EndMenu");
+            else if(captureFail) SceneManager.LoadScene("ExplainAnimation");
+            else SceneManager.LoadScene("Charge");
+
         }
     }
 
@@ -38,12 +79,18 @@ public class SelectInatanceEnemy : MonoBehaviour
             UICaptureCurious.SetActive(true);
         else if (InteractNPC.enemyInstance == 2)
             UICaptureHook.SetActive(true);
+        else if (InteractNPC.enemyInstance == 3 || InteractNPC.enemyInstance == 4)
+            UICaptureParasity.SetActive(true);
+        GameObject.FindWithTag("captureObject").GetComponent<EnemyMove>().stopMoveEnemy();
+        CaptureInstance.instanceFlama = false;
+        FindObjectOfType<AudioManager>().Stop();
+        FindObjectOfType<AudioManager>().Play("winTheme");
         StartCoroutine(ScreenCharge());
     }
 
     IEnumerator ScreenCharge()
     {
-        yield return new WaitForSeconds(6);
-        SceneManager.LoadScene("SampleScene");
+        yield return new WaitForSeconds(2);
+        sceneReset = true;
     }
 }

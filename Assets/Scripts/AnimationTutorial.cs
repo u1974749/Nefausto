@@ -14,6 +14,7 @@ public class AnimationTutorial : MonoBehaviour
         {
             tutorial.SetActive(true);
             active = false;
+            CaptureInstance.instanceFlama = false;
             StartCoroutine(deleteTutorial());
         }
     }
@@ -21,6 +22,7 @@ public class AnimationTutorial : MonoBehaviour
     IEnumerator deleteTutorial()
     {
         yield return new WaitForSeconds(8);
+        CaptureInstance.instanceFlama = true;
         tutorial.SetActive(false);
     }
 }

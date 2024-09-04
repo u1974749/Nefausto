@@ -25,8 +25,7 @@ public class UIHealth : MonoBehaviour
     public void Damage()
     {
         if(health > 0)
-            health -= 20;
-        Debug.Log("DAMAGE");
+            health -= 10;
         actualizeHealth();
     }
 

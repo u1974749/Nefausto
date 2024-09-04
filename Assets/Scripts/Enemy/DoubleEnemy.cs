@@ -9,29 +9,28 @@ public class DoubleEnemy : MonoBehaviour
     [SerializeField] public Transform spawnPoint;
     [SerializeField] public Transform spawnPoint2;
 
+    public static bool isCopying = true;
+
     void Update()
     {
-        StartCoroutine("activeIllusion");
+        if(isCopying)
+            StartCoroutine("activeIllusion");
     }
 
-    // Update is called once per frame
     IEnumerator activeIllusion()
     {
         yield return new WaitForSeconds(2);
-        //while (true)
-        //{
-            if(illusion.Count == 0)
-            {
-                illusion.Add(Instantiate(enemy, spawnPoint.position, Quaternion.identity));
-                illusion.Add(Instantiate(enemy, spawnPoint2.position, Quaternion.identity));
-                Debug.Log("DATE CUENTA ");
-            }
-            else if (illusion[0] == null && illusion[1] == null)
-            {
-                illusion[0] = Instantiate(enemy, spawnPoint.position, Quaternion.identity);
-                illusion[1] = Instantiate(enemy, spawnPoint2.position, Quaternion.identity);
-            }
-        //}
+  
+        if(illusion.Count == 0)
+        {
+            illusion.Add(Instantiate(enemy, spawnPoint.position, Quaternion.identity));
+            illusion.Add(Instantiate(enemy, spawnPoint2.position, Quaternion.identity));
+        }
+        else if (illusion[0] == null && illusion[1] == null)
+        {
+            illusion[0] = Instantiate(enemy, spawnPoint.position, Quaternion.identity);
+            illusion[1] = Instantiate(enemy, spawnPoint2.position, Quaternion.identity);
+        }
     }
 
     public void deleteDouble(GameObject copy)

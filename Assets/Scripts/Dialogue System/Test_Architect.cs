@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
@@ -20,12 +21,9 @@ namespace TESTING
         [SerializeField] GameObject dialogue;
         [SerializeField] GameObject options;
         bool activeOptions = false;
+        bool activeParasity = false;
         private int n = 0;
-        // Start is called before the first frame update
-        /*string[] lines = new string[5]
-        {
-            "The criature..."
-        };*/
+
         void Start()
         {
             ds = DialogueSystem.instance;
@@ -38,7 +36,6 @@ namespace TESTING
             n++;
         }
 
-        // Update is called once per frame
         void Update()
         {
             controls.SetActive(false);
@@ -56,6 +53,11 @@ namespace TESTING
                         options.SetActive(true);
                         n = lines.Length;
                     }
+                    else if (activeParasity)
+                    {
+                        n = lines.Length;
+                        GameObject.Find("Canvas").GetComponent<UICapture>().HelpOption();
+                    }
                     else
                     {
                         character.SetActive(false);
@@ -71,13 +73,16 @@ namespace TESTING
                     n++;
                 }
             }
-            //else if(Input.GetKeyDown(KeyCode.A))
-              //  architect.Append(lina[Random.Range(0, lina.Length)]);
         }
 
         public void onOptions()
         {
             activeOptions = true;
+        }
+
+        public void onParasity()
+        {
+            activeParasity = true;
         }
 
         public void offOptions()
@@ -87,7 +92,6 @@ namespace TESTING
             dialogue.SetActive(false);
             canvas.SetActive(false);
             controls.SetActive(true);
-            //n = 0;
         }
     }
 }

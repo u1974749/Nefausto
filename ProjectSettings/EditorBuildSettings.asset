@@ -6,16 +6,22 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Menu.unity
+    guid: f499a155326d4f44f9e8065bd3519331
+  - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: d1c3109bdb54ad54c8a2b2838528e640
   - enabled: 1
     path: Assets/Scenes/Capture.unity
     guid: 5e43520b7de059f4f8b0197ed58fa731
   - enabled: 1
-    path: Assets/Scenes/Menu.unity
-    guid: f499a155326d4f44f9e8065bd3519331
-  - enabled: 1
     path: Assets/Scenes/Charge.unity
     guid: 688aad05ef96dc54f8f9ec26a415e8f5
+  - enabled: 1
+    path: Assets/Scenes/EndMenu.unity
+    guid: e7bd7f613a9c1834b855ac982aea3094
+  - enabled: 1
+    path: Assets/Scenes/ExplainAnimation.unity
+    guid: 09e46f91dee605e49a992d73baea78d1
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

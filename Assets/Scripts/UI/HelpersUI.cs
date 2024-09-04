@@ -15,21 +15,14 @@ public class HelpersUI : MonoBehaviour
     public GameObject buttonOn;
     public GameObject buttonOff;
 
+    void Awake()
+    {
+        ActiveHelpers();
+    }
+
     public void ActiveHelpers()
     {
-        GameObject cp = GameObject.FindWithTag("styler");
-        if (cp != null)
-        {
-            cp.GetComponent<captureMove>().ClearColliders(0);
-            Destroy(cp);
-        }
-        GameObject CaptureObject = GameObject.FindWithTag("captureObject");
-        CaptureObject.GetComponent<EnemyMove>().stopMoveEnemy();
-        CaptureInstance.instanceFlama = false;
-
         canvasHelpers.SetActive(true);
-        buttonOn.SetActive(false);
-        buttonOff.SetActive(true);
 
         if (captureMove.captureSad)
         {
@@ -50,11 +43,6 @@ public class HelpersUI : MonoBehaviour
 
     public void DeactiveHelpers()
     {
-        GameObject CaptureObject = GameObject.FindWithTag("captureObject");
-        CaptureObject.GetComponent<EnemyMove>().startMoveEnemy();
-        CaptureInstance.instanceFlama = true;
         canvasHelpers.SetActive(false);
-        buttonOn.SetActive(true);
-        buttonOff.SetActive(false);
     }
 }

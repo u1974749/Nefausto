@@ -1431,6 +1431,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   col: {fileID: 0}
+  colTwo: {fileID: 0}
 --- !u!114 &8303775034338138191
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1446,7 +1447,6 @@ MonoBehaviour:
   player: {fileID: 0}
   lake: {fileID: 0}
   lake1: {fileID: 0}
-  lake2: {fileID: 0}
 --- !u!114 &8308144122541038496
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1459,6 +1459,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96060b7100da5f041b870b1c177b260a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  numberMax: 6
   numberLights: []
 --- !u!1 &8163133021137255159
 GameObject:

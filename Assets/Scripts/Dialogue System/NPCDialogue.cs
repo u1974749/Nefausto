@@ -17,6 +17,14 @@ public class NPCDialogue : MonoBehaviour
         introduction.GetComponent<Test_Architect>().onOptions();
     }
 
+    public void ActiveIntroductionParasity()
+    {
+        character.SetActive(true);
+        introduction.SetActive(true);
+        canvas.SetActive(true);
+        introduction.GetComponent<Test_Architect>().onParasity();
+    }
+
     public void ActiveFinalMessage()
     {
         character.SetActive(true);

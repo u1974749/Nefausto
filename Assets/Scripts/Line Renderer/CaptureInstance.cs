@@ -10,6 +10,7 @@ public class CaptureInstance : MonoBehaviour
     [SerializeField] private float speed;
     public static bool instanceFlama = true;
     public string cleanerName = "";
+    public GameObject line;
 
     public Material materialShine;
 
@@ -17,11 +18,10 @@ public class CaptureInstance : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            //Debug.Log(System.Environment.MachineName); name of computer
             Vector3 touch = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 6.3f));
             if(instanceFlama)
             {
-                GameObject line = Instantiate(linePrefab, touch, Quaternion.identity);
+                line = Instantiate(linePrefab, touch, Quaternion.identity);
                 if(captureMove.changeMaterial)
                     line.GetComponent<LineRenderer>().material = materialShine;
             }
@@ -33,7 +33,10 @@ public class CaptureInstance : MonoBehaviour
             {
                 if(cp.GetComponent<captureMove>() != null)
                 {
-                    cp.GetComponent<captureMove>().ClearColliders(-1);
+                    GameObject counterCap = GameObject.FindWithTag("captureObject");
+                    if (line.GetComponent<captureMove>().counterCapture < counterCap.GetComponent<EnemyMove>().counterCapture)
+                        cp.GetComponent<captureMove>().ClearColliders(0);
+                    else cp.GetComponent<captureMove>().ClearColliders(-1);
                     StartCoroutine(waitDestroy(cp));
                 }
                 else if(cp.GetComponent<LineMechanics>() != null)

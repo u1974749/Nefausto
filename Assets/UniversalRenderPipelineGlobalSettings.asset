@@ -31,7 +31,7 @@ MonoBehaviour:
   lightLayerName5: Light Layer 5
   lightLayerName6: Light Layer 6
   lightLayerName7: Light Layer 7
-  m_ShaderVariantLogLevel: 0
+  m_ShaderVariantLogLevel: 2
   m_ExportShaderVariants: 1
   m_StripDebugVariants: 1
   m_StripUnusedPostProcessingVariants: 1

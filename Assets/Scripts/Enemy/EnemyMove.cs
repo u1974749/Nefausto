@@ -5,8 +5,6 @@ using UnityEngine.AI;
 
 public class EnemyMove : MonoBehaviour
 {
-    //public Transform target;
-
     public float minTargX;
     public float maxTargX;
     public float minTargZ;
@@ -19,7 +17,7 @@ public class EnemyMove : MonoBehaviour
     public int counterCapture;
     public bool move = true;
 
-    public bool waitTutorial = true;
+    public static bool waitTutorial = true;
 
     void Start()
     {
@@ -55,14 +53,16 @@ public class EnemyMove : MonoBehaviour
     IEnumerator waitTut()
     {
         yield return new WaitForSeconds(8);
-        RandomDirection();
-        StartCoroutine(changeDirection());
+        DoubleEnemy.isCopying = true;
+        startMoveEnemy();
     }
 
     public void stopMoveEnemy()
     {
         move = false;
         ShootEnemy.isShooting = false;
+        DoubleEnemy.isCopying = false;
+        gameObject.GetComponent<NavMeshAgent>().isStopped = true;
         StopCoroutine(changeDirection());
     }
 
@@ -70,6 +70,8 @@ public class EnemyMove : MonoBehaviour
     {
         move = true;
         ShootEnemy.isShooting = true;
+        DoubleEnemy.isCopying = true;
+        gameObject.GetComponent<NavMeshAgent>().isStopped = false;
         StartCoroutine(changeDirection());
     }
 }

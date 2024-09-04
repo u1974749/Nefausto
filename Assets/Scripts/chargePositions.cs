@@ -10,10 +10,6 @@ public class chargePositions : MonoBehaviour
 
     void Awake()
     {
-        /*if (PlayerPrefs.HasKey("PlayerX") && PlayerPrefs.HasKey("PlayerY") && PlayerPrefs.HasKey("PlayerZ"))
-        {
-            player.transform.position = new Vector3(PlayerPrefs.GetFloat("PlayerX"), PlayerPrefs.GetFloat("PlayerY"), PlayerPrefs.GetFloat("PlayerZ"));
-        }*/
         if(PlayerPrefs.HasKey("VenonX") && PlayerPrefs.HasKey("VenonY") && PlayerPrefs.HasKey("VenonZ"))
         {
             lake.transform.position = new Vector3(PlayerPrefs.GetFloat("VenonX"), PlayerPrefs.GetFloat("VenonY"), PlayerPrefs.GetFloat("VenonZ"));

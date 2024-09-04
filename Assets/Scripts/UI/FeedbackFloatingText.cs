@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class FeedbackFloatingText : MonoBehaviour
 {
+    private void Update()
+    {
+        gameObject.transform.rotation = Quaternion.LookRotation(new Vector3(0, -90, 0));
+    }
     public void activeDestroy()
     {
         StartCoroutine("destroyFloatingText");
@@ -11,7 +15,7 @@ public class FeedbackFloatingText : MonoBehaviour
 
     IEnumerator destroyFloatingText()
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.5f);
         Destroy(this.gameObject);
     }
 }

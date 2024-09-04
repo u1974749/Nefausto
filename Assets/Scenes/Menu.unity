@@ -872,6 +872,100 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1086769749
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1086769751}
+  - component: {fileID: 1086769750}
+  m_Layer: 0
+  m_Name: GamaManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1086769750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1086769749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99e0e0af7ba18d349b0ba4204bb71010, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: damageAttack
+    clip: {fileID: 8300000, guid: fffbe8042f5191841b205c7470a79e3e, type: 3}
+    source: {fileID: 0}
+    volume: 1
+    pitch: 2
+    loop: 0
+  - name: stepsSand
+    clip: {fileID: 8300000, guid: 9d75e66a4a643614e83d8d37414c2f24, type: 3}
+    source: {fileID: 0}
+    volume: 1
+    pitch: 2
+    loop: 0
+  - name: stylerSound
+    clip: {fileID: 8300000, guid: 5f4f6a8b350b4ce498509821ab7d52bf, type: 3}
+    source: {fileID: 0}
+    volume: 0.342
+    pitch: 0.72
+    loop: 0
+  - name: menuButton
+    clip: {fileID: 8300000, guid: ab2d5b0bb188c8f4791fe956485a2395, type: 3}
+    source: {fileID: 0}
+    volume: 0.142
+    pitch: 3
+    loop: 0
+  - name: principalTheme
+    clip: {fileID: 8300000, guid: a7a13cff02449fe41b6e799dde743e52, type: 3}
+    source: {fileID: 0}
+    volume: 0.142
+    pitch: 1
+    loop: 0
+  - name: battleTheme
+    clip: {fileID: 8300000, guid: 56370d6e71d9d1c4b91e4e6d82923d8a, type: 3}
+    source: {fileID: 0}
+    volume: 0.7
+    pitch: 1
+    loop: 1
+  - name: menuTheme
+    clip: {fileID: 8300000, guid: 7194e1c954ca59b4ca7c07e71e4e5c07, type: 3}
+    source: {fileID: 0}
+    volume: 0.286
+    pitch: 1
+    loop: 0
+  - name: winTheme
+    clip: {fileID: 8300000, guid: 9cee068a33038a843b2533cd97f79b4a, type: 3}
+    source: {fileID: 0}
+    volume: 0.687
+    pitch: 1
+    loop: 0
+  instance: {fileID: 1086769750}
+--- !u!4 &1086769751
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1086769749}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 58.555496, y: 2.1788, z: 16.268085}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1193402274
 GameObject:
   m_ObjectHideFlags: 0
@@ -1874,3 +1968,4 @@ SceneRoots:
   - {fileID: 1473731561}
   - {fileID: 944388207}
   - {fileID: 1929100196}
+  - {fileID: 1086769751}

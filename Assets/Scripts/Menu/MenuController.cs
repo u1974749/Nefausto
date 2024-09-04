@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,6 +10,8 @@ public class MenuController : MonoBehaviour
 
     private void Start()
     {
+        FindObjectOfType<AudioManager>().Stop();
+        FindObjectOfType<AudioManager>().Play("menuTheme");
         PlayerPrefs.SetFloat("PlayerX", 2.640977f);
         PlayerPrefs.SetFloat("PlayerY", -0.00999999f);
         PlayerPrefs.SetFloat("PlayerZ", 21.93249f);
@@ -30,7 +30,7 @@ public class MenuController : MonoBehaviour
 
     public void Play()
     {
-        SceneManager.LoadScene("Charge");
+        SceneManager.LoadScene("ExplainAnimation");
     }
     public void Quit()
     {

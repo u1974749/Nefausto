@@ -12,7 +12,7 @@ public class Helpers : MonoBehaviour
 
     public GameObject root;
     private GameObject rootInstance;
-    public bool rootGrew;
+    public static bool rootGrew;
     
     public static float llamitaTimer = 400;
     public static float llamitaTimerMax = 400;
@@ -24,19 +24,16 @@ public class Helpers : MonoBehaviour
     public void flamaHelp()
     {
         captureMove.flamaDisolveFog = true;
-        GameObject.FindWithTag("Canvas").GetComponent<HelpersUI>().DeactiveHelpers();
     }
 
     public void threeHelp()
     {
         if (sadTimer >= sadTimerMax)
         {
-            GameObject.FindWithTag("Canvas").GetComponent<HelpersUI>().DeactiveHelpers();
             GameObject captureObject = GameObject.FindWithTag("captureObject");
             captureObject.GetComponent<EnemyMove>().stopMoveEnemy();
             rootInstance = Instantiate(root, captureObject.transform.position, Quaternion.identity);
             rootGrew = true;
-            Debug.Log("Que pasa");
             sadTimer = 0;
             StartCoroutine(stopAttack(captureObject));
         }
@@ -53,14 +50,16 @@ public class Helpers : MonoBehaviour
 
     public void curiousHelp()
     {
-        DestroyCollider.attackInmumne = true;
-        captureMove.changeMaterial = true;
-        //captureMove styler = GameObject.FindWithTag("styler").GetComponent<captureMove>();
-        //if (styler != null)
-          //  styler.ChangeMaterialLine();
-        GameObject.FindWithTag("Canvas").GetComponent<HelpersUI>().DeactiveHelpers();
-        curiousTimer = 0;
-        StartCoroutine(painAttackOn());
+        if (curiousTimer >= curiousTimerMax)
+        {
+            DestroyCollider.attackInmumne = true;
+            captureMove.changeMaterial = true;
+            captureMove styler = GameObject.FindWithTag("styler").GetComponent<captureMove>();
+            if (styler != null)
+              styler.ChangeMaterialLine();
+            curiousTimer = 0;
+            StartCoroutine(painAttackOn());
+        }
     }
     IEnumerator painAttackOn()
     {
@@ -80,20 +79,10 @@ public class Helpers : MonoBehaviour
             rootInstance.transform.position = GameObject.FindWithTag("captureObject").transform.position;
             rootInstance.GetComponent<MeshRenderer>().material.SetFloat("_Grow", (rootInstance.GetComponent<MeshRenderer>().material.GetFloat("_Grow") + Time.deltaTime * 1.5f));
         }
-        //else if (!rootGrew && rootInstance.GetComponent<MeshRenderer>().material.GetFloat("_Grow") > 0)
-        //{
-          //  rootInstance.GetComponent<MeshRenderer>().material.SetFloat("_Grow", (rootInstance.GetComponent<MeshRenderer>().material.GetFloat("_Grow") - Time.deltaTime * 1.5f));
-        //}
     }
 
     void circleTimer()
     {
-        /*if (llamitaTimer < llamitaTimerMax)
-        {
-            llamitaTimer = llamitaTimer + Time.deltaTime;
-            if(llamitaImage.IsActive())
-                llamitaImage.fillAmount = llamitaTimer / llamitaTimerMax;
-        }*/
         if (sadTimer < sadTimerMax)
         {
             sadTimer = sadTimer + Time.deltaTime;

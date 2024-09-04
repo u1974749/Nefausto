@@ -26,9 +26,6 @@ public class LineMechanics : MonoBehaviour
     //LINE RENDERER LENGTH
     public int lineMaxLength = 25;
 
-    //CLEANER
-    //public GameObject cleaner;
-
     private void Start()
     {
         cam = GameObject.Find("Main Camera").GetComponent<Camera>();
@@ -46,8 +43,6 @@ public class LineMechanics : MonoBehaviour
             ray = cam.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit))
             {
-                Debug.DrawRay(transform.position, hit.point, Color.green);
-
                 if (hit.collider == floor)
                 {
                     transform.position = Vector3.MoveTowards(transform.position, hit.point, Time.deltaTime * speed);
@@ -113,8 +108,6 @@ public class LineMechanics : MonoBehaviour
     //DELETE COLLIDER
     public void DestroyAllColliders()
     {
-        //GameObject cleaner = GameObject.Find("Cleaner");
-        //cleaner.GetComponent<selectLights>().cleanLights();
         lineRenderer.positionCount = 1;
         lineRenderer.SetPosition(0, antPosition);
         pointsLineRenderer.Clear();
@@ -125,6 +118,7 @@ public class LineMechanics : MonoBehaviour
         }
         lineColliders.Clear();
     }
+
     public bool checkIntersection()
     {
         Vector3 lastPoint2 = pointsLineRenderer[pointsLineRenderer.Count - 1];
@@ -183,14 +177,6 @@ public class LineMechanics : MonoBehaviour
         for (int i = 0; i < f.Length; i++)
         {
             f[i].gameObject.GetComponent<DetectLight>().OffLight();
-            //Do something with myChildScript
         }
-        
-        /*List<GameObject> f = new List<GameObject>(GameObject.FindGameObjectsWithTag("farol"));
-        
-        for(int i=0; i < f.Count; i++)
-        {
-            f[i].gameObject.GetComponent<DetectLight>().OffLight();
-        }*/
     }
 }
