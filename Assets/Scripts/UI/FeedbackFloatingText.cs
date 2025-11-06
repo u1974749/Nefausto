@@ -15,7 +15,7 @@ public class FeedbackFloatingText : MonoBehaviour
 
     IEnumerator destroyFloatingText()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(3.5f);
         Destroy(this.gameObject);
     }
 }

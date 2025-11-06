@@ -57,8 +57,8 @@ public class captureMove : MonoBehaviour
     public bool sphereContainerGrew;
 
     //CAPTURE CHECKS
-    public static bool captureSad = false;
-    public static bool captureCuriosity = false;
+    public static bool captureSad = true;
+    public static bool captureCuriosity = true;
     public static bool captureHook = false;
     public static bool captureParasityOne = false;
     public static bool captureParasityTwo = false;
